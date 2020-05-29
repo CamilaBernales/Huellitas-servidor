@@ -17,6 +17,14 @@ const ProductoSchema = mongoose.Schema({
     disponibilidad:{
         type: Boolean,
         default: true
+    },
+    descuento: {
+        type: Number,
+        required: true
+    },
+    image:{
+        type: String,
+        required: true
     }
 });
 module.exports = mongoose.model('Producto', ProductoSchema);

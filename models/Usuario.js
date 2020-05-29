@@ -17,7 +17,7 @@ const UsuarioSchema  = mongoose.Schema({
         required: true,
         trim: true
     },
-    registro:{
+    created_at:{
         type: Date,
         default: Date.now()
     }

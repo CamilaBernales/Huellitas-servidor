@@ -7,9 +7,11 @@ const conectatDB = async () => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useFindAndModify: false,
+      useCreateIndex: true
     });
     console.log("db conectada.");
   } catch (error) {
+    console.log('hubo un error')
     console.log(error);
     process.exit(1);
   }
