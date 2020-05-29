@@ -15,8 +15,9 @@ app.use(express.urlencoded({ extended: true})); // for parsing application/x-www
 
 //rutas
 app.use('/api/usuarios', require('./routes/usuarios'));
+app.use('/api/turnos', require('./routes/turnos'));
 
 //arrancar servidor
-app.listen(PORT, () => {
+app.listen(4000, () => {
     console.log('Servidor Funcionando');
 })

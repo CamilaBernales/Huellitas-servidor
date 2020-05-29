@@ -28,6 +28,10 @@ const TurnoSchema = mongoose.Schema({
     dueño:{
        type: mongoose.Schema.Types.ObjectId,
        ref: 'Usuario'
+    },
+    fecha:{
+        type: Date,
+        required: true
     }
 });
 
