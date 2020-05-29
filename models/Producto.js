@@ -22,7 +22,7 @@ const ProductoSchema = mongoose.Schema({
         type: Number,
         required: true
     },
-    image:{
+    imagen:{
         type: String,
         required: true
     }
