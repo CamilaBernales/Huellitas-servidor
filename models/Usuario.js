@@ -20,7 +20,12 @@ const UsuarioSchema  = mongoose.Schema({
     created_at:{
         type: Date,
         default: Date.now()
-    }
+    },
+    rol: {
+        type: String,
+        required: true,
+        default: "usuario"
+      }
 });
 
 module.exports = mongoose.model('Usuario', UsuarioSchema);

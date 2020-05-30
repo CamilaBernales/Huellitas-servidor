@@ -14,6 +14,7 @@ app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true})); // for parsing application/x-www-form-urlencoded
 
 //rutas
+app.use('/api/auth', require('./routes/auth'))
 app.use('/api/usuarios', require('./routes/usuarios'));
 app.use('/api/turnos', require('./routes/turnos'));
 

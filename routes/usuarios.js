@@ -5,7 +5,7 @@ const { check } = require("express-validator");
 
 //crear usuario
 // request a : api/usuarios
-router.post('/', 
+router.post('/registro', 
     [
         check('nombre','El nombre es obligatorio.').notEmpty(),
         check('email','El email es obligatorio.').notEmpty(),

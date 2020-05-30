@@ -6,7 +6,7 @@ const ProductoSchema = mongoose.Schema({
         required: true,
         trim: true
     },
-    cantidad:{
+    stock:{
         type: Number,
         required: true
     },
