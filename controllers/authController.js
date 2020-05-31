@@ -1,5 +1,5 @@
 const Usuario = require("../models/Usuario");
-const bcryptjs= require('bcryptjs')
+const bcryptjs = require("bcryptjs");
 const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 
@@ -32,7 +32,7 @@ exports.autenticarUsuario = async (req, res) => {
       },
       (error, token) => {
         if (error) throw error;
-        res.json({msg:"bienvenido", token });
+        res.json({ msg: "bienvenido", token });
       }
     );
   } catch (error) {
