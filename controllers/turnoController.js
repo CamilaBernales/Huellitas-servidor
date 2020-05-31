@@ -14,7 +14,7 @@ exports.crearTurno = async (req, res) => {
     let turno = await Turno.findOne({ fecha });
     if (turno) {
       return res
-        .status(500)
+        .status(403)
         .json({ msg: "Elija una fecha que no este ocupada." });
     }
     turno = new Turno(req.body);
@@ -32,7 +32,7 @@ exports.crearTurno = async (req, res) => {
 exports.updateTurno = async (req, res) => {
   const errores = validationResult(req);
   if (!errores.isEmpty()) {
-    return res.status(500).json({ errores: errores.array() });
+    return res.status(422).json({ errores: errores.array() });
   }
   const turnoUpdate = req.body;
   try {
@@ -51,6 +51,28 @@ exports.updateTurno = async (req, res) => {
     res.status(500).json({ msg: "Hubo un error." });
   }
 };
+
+
+//obtener turnos
+exports.obtenerTurnos = async (req, res) => {
+  try {
+      const turnos = await Turno.find({});
+      res.json(turnos);
+  } catch (error) {
+    res.status(500).json({ msg: "Hubo un error." });
+  }
+}
+//obtener todos los turnos de un usuario en especifico
+exports.obtenerTurnosUsuario = async (req, res) => {
+  try {
+      const turnos = await Turno.find({ dueño: req.params.id })
+      res.json({ turnos });
+  } catch (error) {
+      console.log(error);
+      res.status(500).send('Hubo un error');
+  }
+}
+
 
 //eliminar turnos de la bd
 exports.eliminarTurno = async (req, res) => {

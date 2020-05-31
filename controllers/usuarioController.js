@@ -34,7 +34,7 @@ exports.crearUsuario = async (req, res) => {
     const payload = {
       usuario: {
         id: usuario.id,
-        rol: usuario.rol
+        rol: usuario.rol,
       },
     };
     jwt.sign(
@@ -51,6 +51,6 @@ exports.crearUsuario = async (req, res) => {
     );
   } catch (error) {
     console.error(error);
-    res.status(400).json({ msg: "Hubo un error" });
+    res.status(500).json({ msg: "Hubo un error" });
   }
 };

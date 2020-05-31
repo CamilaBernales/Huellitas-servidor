@@ -13,18 +13,29 @@ module.exports = function (req, res, next) {
           error,
         });
       }
-      if (req.method != "POST" || req.method != "GET") {
+      //cuando el usuario quiera un turno
+      if (
+        req.path === "turnos/alta" ||
+        req.path === "turnos/listadoturno/:id"
+      ) {
+        //metodo: quiero un turno => post un turno ; o quiero ver mis turnos => dame mis turnos
+        console.log("soy un if que no anda :(");
+        //tomo el id del dueño del animal
+        req.usuario = req.decoded.id;
+        //ejecuto lo del controller
+        next();
+      }
+      //el path es diferente
+      else {
+        //valida que soy admin y puedo crear, borrar o actualizar algo
         if (decoded.usuario.rol === "admin") {
+          //ejecuta lo del controller
           next();
         } else {
-          // console.log(decoded.usuario.rol)
-          return res.status(403).send({
-            msg: "Permiso no válido",
-          });
+          //la ruta es otra pero no soy admin
+          res.status(401).json({ msg: "Permiso no válido." });
+          next();
         }
-      } else {
-        req.usuario = decoded.usuario;
-        next();
       }
     });
   } catch (error) {

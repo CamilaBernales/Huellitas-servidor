@@ -5,7 +5,7 @@ const { check } = require("express-validator");
 const auth = require("../middleware/auth");
 
 router.post(
-  "/",
+  "/alta",
   auth,
   [
     check("nombremascota", "El nombre de tu mascota obligatorio.").notEmpty(),
@@ -19,8 +19,13 @@ router.post(
   ],
   turnoController.crearTurno
 );
-
+//actualizar turno
 router.put("/update/:id", auth, turnoController.updateTurno);
+//borrar turno
 router.delete("/delete/:id", auth, turnoController.eliminarTurno);
+//obtener TODOS los turnos
+router.get("/listadoturnos", auth, turnoController.obtenerTurnos);
+//obtener turnos de un usuario especifico
+router.get("/listadoturno/:id", auth, turnoController.obtenerTurnosUsuario);
 
 module.exports = router;
