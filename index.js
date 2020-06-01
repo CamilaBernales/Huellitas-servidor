@@ -1,12 +1,14 @@
 const express  = require('express');
 const conectarDB = require('./db');
 const morgan = require('morgan');
+const cors = require('cors');
 
 const app = express();
 
 //puerto
 const PORT = process.env.PORT || 4000;
 //conectar bd
+app.use(cors());
 conectarDB();
 //middlewares
 app.use(morgan('dev'));
