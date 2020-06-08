@@ -6,10 +6,6 @@ const ProductoSchema = mongoose.Schema({
     required: true,
     trim: true,
   },
-  stock: {
-    type: Number,
-    required: true,
-  },
   descripcion: {
     type: String,
     required: true,

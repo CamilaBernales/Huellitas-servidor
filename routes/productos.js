@@ -20,13 +20,6 @@ router.post(
 );
 //actualizar producto
 router.put("/update/:id", auth, authrol, productoController.updateProducto);
-//borrar producto
-router.delete(
-  "/delete/:id",
-  auth,
-  authrol,
-  productoController.eliminarProducto
-);
 //obtener TODOS los productos
 router.get("/listado", auth, productoController.obtenerProductos);
 
