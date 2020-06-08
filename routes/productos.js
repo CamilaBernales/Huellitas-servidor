@@ -11,9 +11,7 @@ router.post(
   [
     check("nombre", "El nombre del producto es obligatorio.").notEmpty(),
     check("descripcion", "La descripcion del producto es obligatoria.").notEmpty(),
-    check("stock", "La cantidad de stock es obligatoria.").notEmpty(),
     check("precio", "El precio del producto es obligatorio.").notEmpty(),
-    check("descuento", "El descuento del producto es obligatorio.").notEmpty(),
     check("imagen", "La imagen del producto es obligatoria.").notEmpty(),
   ],
   productoController.crearProducto
