@@ -8,14 +8,14 @@ exports.crearTurno = async (req, res) => {
     return res.status(422).json({ errores: errores.array() });
   }
 
-  const { fecha } = req.body;
+  const { fecha, hora } = req.body;
   // const hora = moment(req.body.fecha).format('LLLL');
   try {
-    let turno = await Turno.findOne({ fecha });
+    let turno = await Turno.findOne({ fecha, hora });
     if (turno) {
       return res
         .status(403)
-        .json({ msg: "Elija una fecha que no este ocupada." });
+        .json({ msg: "Elija una fecha y un horario que este disponible." });
     }
     turno = new Turno(req.body);
     turno.dueño = req.usuario.id;

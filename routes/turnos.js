@@ -12,6 +12,7 @@ router.post(
     check("nombremascota", "El nombre de tu mascota obligatorio.").notEmpty(),
     check("edad", "La edad de tu mascota es obligatoria.").notEmpty(),
     check("raza", "La raza de tu mascota es obligatoria.").notEmpty(),
+    check("resumen", "Cuentanos un poco que le pasa a tu mascota.").notEmpty(),
     check(
       "profesional",
       "Debe elegir el profesional que atenderé a su mascota."

@@ -20,6 +20,11 @@ const TurnoSchema = mongoose.Schema({
         required: false,
         trim: true
     },
+    resumen:{
+        type: String,
+        required: true,
+        trim: true
+    },
     profesional:{
         type: String,
         required: true,
@@ -30,7 +35,11 @@ const TurnoSchema = mongoose.Schema({
        ref: 'Usuario'
     },
     fecha:{
-        type: Date,
+        type: String,
+        required: true
+    },
+    hora:{
+        type: String,
         required: true
     }
 });
