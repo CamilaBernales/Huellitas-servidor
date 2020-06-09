@@ -30,7 +30,7 @@ exports.crearTurno = async (req, res) => {
 
 //obtener
 exports.obtenerHorariosDisponibles = async (req, res) => {
-  let hdisp = [
+  let horarios = [
     "9:00",
     "9:30",
     "10:00",
@@ -51,10 +51,12 @@ exports.obtenerHorariosDisponibles = async (req, res) => {
     "19:00",
   ];
   try {
-    let turno = await Turno.find({ fecha: req.params.fecha });
-    res.json({ turno });
-    if (turno) {
-      hdisp.filter((horario) => horario !== turno.hora);
+    let turnos = await Turno.find({ fecha: req.params.fecha });
+    // res.json({turnos})
+    if (turnos) {
+     const hdisp= horarios.filter((horario) => !turnos.some((turno) => horario === turno.hora));
+      res.json({hdisp})
+     
     }
   } catch (error) {
     res.status(500).json({ msg: "Hubo un error." });
