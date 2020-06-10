@@ -20,9 +20,9 @@ app.use('/api/auth', require('./routes/auth'))
 app.use('/api/usuarios', require('./routes/usuarios'));
 app.use('/api/turnos', require('./routes/turnos'));
 app.use('/api/productos', require('./routes/productos'));
+app.use('/api/compra', require('./routes/compra'));
 
-
+app.listen(PORT, () => {
 //arrancar servidor
-app.listen(4000, () => {
-    console.log('Servidor Funcionando');
+    console.log(`Servidor Funcionando en puerto ${PORT}`);
 })
