@@ -8,7 +8,7 @@ exports.crearCompra = async (req,res) => {
   }
   try {
     let compra = new Compra(req.body);
-    await producto.save();
+    await compra.save();
     res.status(200).json({ msg: 'Compra realizada correctamente' });
   } catch (error) {
     console.error(error);
