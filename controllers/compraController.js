@@ -15,3 +15,12 @@ exports.crearCompra = async (req,res) => {
     res.status(500).json({ msg: 'Hubo un error' });
   }
 };
+
+exports.obtenerCompras = async(req, res) => {
+  try {
+    const compras = await Compra.find({});
+    res.status(200).json(compras);
+  } catch (error) {
+    res.status(500).json({ msg: 'Hubo un error' });
+  }
+};
