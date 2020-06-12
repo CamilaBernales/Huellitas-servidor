@@ -22,7 +22,7 @@ exports.crearTurno = async (req, res) => {
         .status(403)
         .json({ msg: "La fecha no puede ser anterior ni igual a la actual." });
     }
-    if (moment(req.body.fecha).day() === 0) {
+    if (moment(fecha).day() === 0) {
       return res.status(403).json({ msg: "No atendemos los domingos." });
     }
     turno = new Turno(req.body);
