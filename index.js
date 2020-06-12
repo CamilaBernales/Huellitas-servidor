@@ -13,14 +13,15 @@ conectarDB();
 //middlewares
 app.use(morgan('dev'));
 app.use(express.json()); // for parsing application/json
-app.use(express.urlencoded({ extended: true})); // for parsing application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 //rutas
-app.use('/api/auth', require('./routes/auth'))
+app.use('/api/auth', require('./routes/auth'));
 app.use('/api/usuarios', require('./routes/usuarios'));
 app.use('/api/turnos', require('./routes/turnos'));
 app.use('/api/productos', require('./routes/productos'));
 app.use('/api/compra', require('./routes/compra'));
+app.use('/api/productocompra', require('./routes/productocompra'));
 
 app.listen(PORT, () => {
 //arrancar servidor

@@ -16,4 +16,5 @@ const CompraSchema = mongoose.Schema({
     required: true
   }
 });
+
 module.exports = mongoose.model("Compra", CompraSchema);
