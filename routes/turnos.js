@@ -18,6 +18,7 @@ router.post(
       "Debe elegir el profesional que atenderé a su mascota."
     ).notEmpty(),
     check("fecha", "La fecha de tu turno es obligatoria.").notEmpty(),
+
   ],
   turnoController.crearTurno
 );

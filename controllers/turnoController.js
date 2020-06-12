@@ -9,13 +9,21 @@ exports.crearTurno = async (req, res) => {
   }
 
   const { fecha, hora } = req.body;
-
   try {
     let turno = await Turno.findOne({ fecha, hora });
+    let fechaActual = moment().format("YYYY-MM-DD");
     if (turno) {
       return res
         .status(403)
         .json({ msg: "Elija una fecha y un horario que este disponible." });
+    }
+    if (fecha <= fechaActual) {
+      return res
+        .status(403)
+        .json({ msg: "La fecha no puede ser anterior ni igual a la actual." });
+    }
+    if (moment(req.body.fecha).day() === 0) {
+      return res.status(403).json({ msg: "No atendemos los domingos." });
     }
     turno = new Turno(req.body);
     turno.dueño = req.usuario.id;
@@ -54,9 +62,10 @@ exports.obtenerHorariosDisponibles = async (req, res) => {
     let turnos = await Turno.find({ fecha: req.params.fecha });
     // res.json({turnos})
     if (turnos) {
-     const hdisp= horarios.filter((horario) => !turnos.some((turno) => horario === turno.hora));
-      res.json({hdisp})
-     
+      const hdisp = horarios.filter(
+        (horario) => !turnos.some((turno) => horario === turno.hora)
+      );
+      res.json({ hdisp });
     }
   } catch (error) {
     res.status(500).json({ msg: "Hubo un error." });
