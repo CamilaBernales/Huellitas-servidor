@@ -28,7 +28,6 @@ exports.crearTurno = async (req, res) => {
     turno = new Turno(req.body);
     turno.dueño = req.usuario.id;
     await turno.save();
-
     res.json({ msg: "Turno creado correctamente" });
   } catch (error) {
     console.log(error);
@@ -57,6 +56,10 @@ exports.obtenerHorariosDisponibles = async (req, res) => {
     "18:00",
     "18:30",
     "19:00",
+    "19:30",
+    "20:00",
+    "20:30",
+    "21:00"
   ];
   try {
     let turnos = await Turno.find({ fecha: req.params.fecha });
