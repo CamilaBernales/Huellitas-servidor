@@ -17,4 +17,6 @@ router.post('/',
   productocompraController.crearProductoCompra
 );
 
+router.get('/listado', auth, productocompraController.obtenerProductoCompra);
+
 module.exports = router;
