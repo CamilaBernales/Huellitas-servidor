@@ -20,6 +20,7 @@ app.use('/api/auth', require('./routes/auth'))
 app.use('/api/usuarios', require('./routes/usuarios'));
 app.use('/api/turnos', require('./routes/turnos'));
 app.use('/api/productos', require('./routes/productos'));
+app.use('/api/mensajes', require('./routes/mensajes'));
 
 
 //arrancar servidor
