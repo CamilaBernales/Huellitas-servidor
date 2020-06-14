@@ -8,7 +8,7 @@ exports.crearTurno = async (req, res) => {
     return res.status(422).json({ errores: errores.array() });
   }
 
-  const { fecha, hora } = req.body;
+  const { fecha, hora, contacto } = req.body;
   try {
     let turno = await Turno.findOne({ fecha, hora });
     let fechaActual = moment().format("YYYY-MM-DD");
@@ -24,6 +24,10 @@ exports.crearTurno = async (req, res) => {
     }
     if (moment(fecha).day() === 0) {
       return res.status(403).json({ msg: "No atendemos los domingos." });
+    }
+    numbervalidation = /^(15)?[0-9]{7,8}/
+    if(!contacto.match(numbervalidation)){
+      return res.status(403).json({ msg: "Número no válido" });
     }
     turno = new Turno(req.body);
     turno.dueño = req.usuario.id;
