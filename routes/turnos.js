@@ -14,6 +14,10 @@ router.post(
       "nombremascota",
       "El nombre de tu mascota no puede exceder los 40 caracteres."
     ).isLength({ max: 40 }),
+    check(
+      "particularidades",
+      "Las particularidades no pueden exceder los 100 caracteres"
+    ).isLength({ max: 120 }),
     check("edad", "La edad de tu mascota es obligatoria.").notEmpty(),
     check("raza", "La raza de tu mascota es obligatoria.").notEmpty(),
     check(
@@ -33,6 +37,7 @@ router.post(
     check("hora", "La hora del turno es obligatoria").notEmpty(),
     check("contacto", "Tu número de teléfono es obligatorio.").notEmpty(),
     check("contacto", "Ingrese un número de teléfono válido.").isNumeric(),
+    check("contacto", "Número de teléfono no valido.").isLength({max: 10}),
   ],
   turnoController.crearTurno
 );

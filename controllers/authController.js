@@ -32,10 +32,24 @@ exports.autenticarUsuario = async (req, res) => {
       },
       (error, token) => {
         if (error) throw error;
-        res.json({ msg: "bienvenido", token });
+        res.json({ token });
       }
     );
   } catch (error) {
+    res.status(500).json({ msg: "Hubo un error." });
+  }
+};
+//obtiene que tipo de usuario es
+exports.isAdmin = async (req, res, next) => {
+  try {
+    const usuario = await Usuario.findById(req.usuario.id).select("rol");
+    if (!usuario.rol.match("admin")) {
+      return res.status(403).json({ msg: "Permiso no válido." });
+    }else{
+        return res.json({msg:'Bienvenido, Admin!'})
+    }
+  } catch (error) {
     console.log(error);
+    res.status(500).json({ msg: "Hubo un error." });
   }
 };

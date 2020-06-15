@@ -25,7 +25,7 @@ exports.crearTurno = async (req, res) => {
     if (moment(fecha).day() === 0) {
       return res.status(403).json({ msg: "No atendemos los domingos." });
     }
-    numbervalidation = /^(15)?[0-9]{7,8}/
+    numbervalidation = /^(15)?[0-9]{7,10}/
     if(!contacto.match(numbervalidation)){
       return res.status(403).json({ msg: "Número no válido" });
     }
