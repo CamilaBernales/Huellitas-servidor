@@ -54,3 +54,26 @@ exports.crearUsuario = async (req, res) => {
     res.status(500).json({ msg: "Hubo un error" });
   }
 };
+
+//obtener listado usuarios
+exports.ObtenerUsuarios = async (req, res) => {
+  try {
+    const usuarios = await Usuario.find({ rol: { $eq: 'usuario'  }}).select('nombre email rol')
+    res.json(usuarios);
+  } catch (error) {
+    res.status(500).json({ msg: "Hubo un error." });
+  }
+};
+
+//cambiar rol de usuario 
+exports.cambiarRol = async(req,res) =>{
+  try {
+    let usuario = Usuario.findById(req.params.id);
+    usuario.findOneAndUpdate(
+      { _id: req.params.id },
+      { new: true }
+    )
+  } catch (error) {
+    res.status(500).json({ msg: "Hubo un error." });
+  }
+}
