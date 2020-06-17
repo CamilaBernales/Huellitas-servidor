@@ -40,13 +40,13 @@ exports.autenticarUsuario = async (req, res) => {
   }
 };
 //obtiene que tipo de usuario es
-exports.isAdmin = async (req, res, next) => {
+exports.isAdmin = async (req, res) => {
   try {
-    const usuario = await Usuario.findById(req.usuario.id).select("rol");
+    const usuario = await Usuario.findById(req.usuario.id);
     if (!usuario.rol.match("admin")) {
-      return res.status(403).json({ msg: "Permiso no válido." });
-    }else{
-        return res.json({msg:'Bienvenido, Admin!'})
+      return res.status(403).json({ validToken: true, isAdmin: false });
+    } else {
+      return res.json({ validToken: true, isAdmin: true });
     }
   } catch (error) {
     console.log(error);
