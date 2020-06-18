@@ -44,7 +44,7 @@ exports.isAdmin = async (req, res) => {
   try {
     const usuario = await Usuario.findById(req.usuario.id);
     if (!usuario.rol.match("admin")) {
-      return res.status(403).json({ validToken: true, isAdmin: false });
+      return res.json({ validToken: true, isAdmin: false });
     } else {
       return res.json({ validToken: true, isAdmin: true });
     }
