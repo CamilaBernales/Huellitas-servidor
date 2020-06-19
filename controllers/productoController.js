@@ -8,10 +8,10 @@ exports.crearProducto = async (req, res) => {
   }
   const { nombre } = req.body;
   try {
-    // let producto = await Producto.findOne({ nombre });
-    // if (producto) {
-    //   return res.status(403).json({ msg: "Este producto ya esta registrado" });
-    // }
+    let producto = await Producto.findOne({ nombre });
+    if (producto) {
+      return res.status(403).json({ msg: "Este producto ya esta registrado" });
+    }
     producto = new Producto(req.body);
     await producto.save();
     res.json({ msg: "Producto creado correctamente" });
@@ -22,7 +22,6 @@ exports.crearProducto = async (req, res) => {
 };
 
 // editar/actualizar producto
-//obtener turnos
 exports.updateProducto = async (req, res) => {
   try {
     const producto = await Producto.findOneAndUpdate(

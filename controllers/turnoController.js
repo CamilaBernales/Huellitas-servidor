@@ -1,4 +1,5 @@
 const Turno = require("../models/Turno");
+const Usuario = require("../models/Usuario");
 const { validationResult } = require("express-validator");
 const moment = require("moment");
 
@@ -91,11 +92,11 @@ exports.obtenerTurnos = async (req, res) => {
 //obtener todos los turnos de un usuario en especifico
 exports.obtenerTurnosUsuario = async (req, res) => {
   try {
-    const turnos = await Turno.find({ dueño: req.params.id });
-    res.json({ turnos });
+    const usuario = await Usuario.findById(req.usuario.id).select('_id');
+    const turnos = await Turno.find({dueño: usuario}).sort('fecha')
+    return res.json({ turnos });
   } catch (error) {
-    console.log(error);
-    res.status(500).send("Hubo un error");
+    res.status(500).json({ msg: "Hubo un error." });
   }
 };
 
