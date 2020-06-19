@@ -14,25 +14,11 @@ router.post(
       "nombremascota",
       "El nombre de tu mascota no puede exceder los 40 caracteres."
     ).isLength({ max: 40 }),
-    check(
-      "particularidades",
-      "Las particularidades no pueden exceder los 100 caracteres"
-    ).isLength({ max: 120 }),
-    check("edad", "La edad de tu mascota es obligatoria.").notEmpty(),
-    check("raza", "La raza de tu mascota es obligatoria.").notEmpty(),
-    check(
-      "raza",
-      "La raza de tu mascota no puede exceder los 40 caracteres."
-    ).isLength({ max: 40 }),
     check("resumen", "Cuentanos un poco que le pasa a tu mascota.").notEmpty(),
     check(
       "resumen",
       "El resumen no puede tener más de 200 cáracteres."
     ).isLength({ max: 200 }),
-    check(
-      "profesional",
-      "Debe elegir el profesional que atenderé a su mascota."
-    ).notEmpty(),
     check("fecha", "La fecha de tu turno es obligatoria.").notEmpty(),
     check("hora", "La hora del turno es obligatoria").notEmpty(),
     check("contacto", "Tu número de teléfono es obligatorio.").notEmpty(),

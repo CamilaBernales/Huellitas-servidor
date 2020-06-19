@@ -8,10 +8,10 @@ exports.crearProducto = async (req, res) => {
   }
   const { nombre } = req.body;
   try {
-    let producto = await Producto.findOne({ nombre });
-    if (producto) {
-      return res.status(403).json({ msg: "Este producto ya esta registrado" });
-    }
+    // let producto = await Producto.findOne({ nombre });
+    // if (producto) {
+    //   return res.status(403).json({ msg: "Este producto ya esta registrado" });
+    // }
     producto = new Producto(req.body);
     await producto.save();
     res.json({ msg: "Producto creado correctamente" });
@@ -24,22 +24,15 @@ exports.crearProducto = async (req, res) => {
 // editar/actualizar producto
 //obtener turnos
 exports.updateProducto = async (req, res) => {
-  const errores = validationResult(req);
-  if (!errores.isEmpty()) {
-    return res.status(422).json({ errores: errores.array() });
-  }
-  const productoUpdate = req.body;
   try {
-    let producto = await Producto.findById(req.params.id);
-    if (!producto) {
-      return res.status(404).json({ msg: "Producto no encontrado." });
-    }
-    producto = await Producto.findByIdAndUpdate(
+    const producto = await Producto.findOneAndUpdate(
       { _id: req.params.id },
-      { $set: productoUpdate },
-      { new: true }
+      req.body,
+      {
+        new: true,
+      }
     );
-    res.json({ producto });
+    res.json(producto);
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Hubo un error." });
@@ -56,3 +49,12 @@ exports.obtenerProductos = async (req, res) => {
   }
 };
 
+//obtener un producto
+exports.obtenerProducto = async (req, res) => {
+  try {
+    const producto = await Producto.findById(req.params.id);
+    res.json({ producto });
+  } catch (error) {
+    res.status(500).send("Hubo un error");
+  }
+};

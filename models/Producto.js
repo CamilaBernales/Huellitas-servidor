@@ -16,12 +16,20 @@ const ProductoSchema = mongoose.Schema({
     required: true,
   },
   disponibilidad: {
-    type: Boolean,
-    default: true,
+    type: String,
+    required: true,
+    default: "Disponible",
   },
   imagen: {
     type: String,
     required: true,
   },
+  espromo:{
+    type:Boolean,
+    default:false
+  },
+  marca:{
+    type: String,
+  }
 });
 module.exports = mongoose.model("Producto", ProductoSchema);

@@ -8,11 +8,11 @@ const TurnoSchema = mongoose.Schema({
   },
   edad: {
     type: Number,
-    required: true,
+    required: false,
   },
   raza: {
     type: String,
-    required: true,
+    required: false,
     trim: true,
   },
   particularidades: {
@@ -21,11 +21,6 @@ const TurnoSchema = mongoose.Schema({
     trim: true,
   },
   resumen: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  profesional: {
     type: String,
     required: true,
     trim: true,

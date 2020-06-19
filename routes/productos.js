@@ -5,7 +5,7 @@ const { check } = require("express-validator");
 const auth = require("../middleware/auth");
 const authrol = require("../middleware/authrol");
 router.post(
-  "/alta",
+  "/altaproducto",
   auth,
   authrol,
   [
@@ -19,6 +19,8 @@ router.post(
 //actualizar producto
 router.put("/update/:id", auth, authrol, productoController.updateProducto);
 //obtener TODOS los productos
-router.get("/listado", auth, productoController.obtenerProductos);
+router.get("/listado", auth, authrol, productoController.obtenerProductos);
+router.get("/producto/:id", auth, authrol, productoController.obtenerProducto);
+
 
 module.exports = router;
