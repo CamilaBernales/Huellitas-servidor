@@ -32,7 +32,7 @@ exports.autenticarUsuario = async (req, res) => {
       },
       (error, token) => {
         if (error) throw error;
-        res.json({ token });
+        res.json({ token, payload});
       }
     );
   } catch (error) {

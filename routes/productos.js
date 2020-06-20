@@ -10,9 +10,13 @@ router.post(
   authrol,
   [
     check("nombre", "El nombre del producto es obligatorio.").notEmpty(),
-    check("descripcion", "La descripcion del producto es obligatoria.").notEmpty(),
+    check(
+      "descripcion",
+      "La descripcion del producto es obligatoria."
+    ).notEmpty(),
     check("precio", "El precio del producto es obligatorio.").notEmpty(),
     check("imagen", "La imagen del producto es obligatoria.").notEmpty(),
+    check("tipoproducto", "El tipo de producto es obligatorio.").notEmpty(),
   ],
   productoController.crearProducto
 );
@@ -21,6 +25,5 @@ router.put("/update/:id", auth, authrol, productoController.updateProducto);
 //obtener TODOS los productos
 router.get("/listado", productoController.obtenerProductos);
 router.get("/producto/:id", auth, authrol, productoController.obtenerProducto);
-
 
 module.exports = router;

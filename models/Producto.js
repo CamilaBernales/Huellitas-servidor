@@ -30,6 +30,10 @@ const ProductoSchema = mongoose.Schema({
   },
   marca:{
     type: String,
+  },
+  tipoproducto:{
+    type:String,
+    required:true
   }
 });
 module.exports = mongoose.model("Producto", ProductoSchema);

@@ -6,9 +6,9 @@ exports.crearProducto = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() });
   }
-  const { nombre } = req.body;
+  const { nombre, descripcion } = req.body;
   try {
-    let producto = await Producto.findOne({ nombre });
+    let producto = await Producto.findOne({ nombre, descripcion });
     if (producto) {
       return res.status(403).json({ msg: "Este producto ya esta registrado" });
     }

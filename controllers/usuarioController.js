@@ -56,7 +56,6 @@ exports.crearUsuario = async (req, res) => {
 };
 
 //obtener un usuario
-//obtener un producto
 exports.ObtenerUsuario = async (req, res) => {
   try {
     const usuario = await Usuario.findById(req.params.id).select('nombre');

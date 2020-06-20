@@ -23,14 +23,14 @@ router.post(
     check("hora", "La hora del turno es obligatoria").notEmpty(),
     check("contacto", "Tu número de teléfono es obligatorio.").notEmpty(),
     check("contacto", "Ingrese un número de teléfono válido.").isNumeric(),
-    check("contacto", "Número de teléfono no valido.").isLength({max: 10}),
+    check("contacto", "Número de teléfono no valido.").isLength({ max: 10 }),
   ],
   turnoController.crearTurno
 );
 //traer horarios disponibles
 router.get("/horariosdip/:fecha", turnoController.obtenerHorariosDisponibles);
 //borrar turno
-router.delete("/delete/:id", auth, turnoController.eliminarTurno);
+router.delete("/delete/:id", auth, authrol, turnoController.eliminarTurno);
 //obtener TODOS los turnos
 router.get("/listadoturnos", auth, authrol, turnoController.obtenerTurnos);
 //obtener turnos de un usuario especifico
