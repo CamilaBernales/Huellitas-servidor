@@ -24,13 +24,14 @@ const ProductoSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  espromo:{
-    type:Boolean,
-    default:false
-  },
-  marca:{
-    type: String,
-  },
+  // espromo:{
+  //   type:Boolean,
+  //   default:false
+  // },
+  // marca:{
+  //   type: String,
+  //   required: true
+  // },
   tipoproducto:{
     type:String,
     required:true

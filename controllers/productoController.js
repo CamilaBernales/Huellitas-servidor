@@ -48,12 +48,21 @@ exports.obtenerProductos = async (req, res) => {
   }
 };
 
-//obtener un producto
+//obtener un producto enviado
 exports.obtenerProducto = async (req, res) => {
   try {
     const producto = await Producto.findById(req.params.id);
     res.json({ producto });
   } catch (error) {
     res.status(500).send("Hubo un error");
+  }
+};
+
+exports.ObtenerProductoFiltrado = async (req, res) => {
+  try {
+    const productosfiltrados = await Producto.find(req.query)
+    res.json(productosfiltrados);
+  } catch (error) {
+    console.log(error);
   }
 };

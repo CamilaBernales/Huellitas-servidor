@@ -24,6 +24,7 @@ router.post(
 router.put("/update/:id", auth, authrol, productoController.updateProducto);
 //obtener TODOS los productos
 router.get("/listado", productoController.obtenerProductos);
-router.get("/producto/:id", auth, authrol, productoController.obtenerProducto);
+router.get("/producto/:id", productoController.obtenerProducto);
+router.get("/productosfiltrados", productoController.ObtenerProductoFiltrado);
 
 module.exports = router;
