@@ -21,7 +21,6 @@ app.use('/api/usuarios', require('./routes/usuarios'));
 app.use('/api/turnos', require('./routes/turnos'));
 app.use('/api/productos', require('./routes/productos'));
 app.use('/api/compra', require('./routes/compra'));
-app.use('/api/productocompra', require('./routes/productocompra'));
 
 app.listen(PORT, () => {
 //arrancar servidor
