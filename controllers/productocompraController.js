@@ -2,14 +2,13 @@ const ProductoCompra = require('../models/ProductoCompra');
 const { validationResult } = require('express-validator');
 
 exports.crearProductoCompra = async (req,res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
-  }
   try {
-    let productocompra = new ProductoCompra(req.body);
-    await productocompra.save();
-    res.status(200).json({ msg: 'Producto de compra guardado corrctamente' });
+    for (let index = 0; index < req.body.pedido.length; index++) {
+      req.body.pedido[index].compra = req.body.compra;
+      let productocompra = new ProductoCompra(req.body.pedido[index]);
+      await productocompra.save();  
+    }
+    res.status(200).json({ msg: 'La compra se realizó correctamente' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: 'Hubo un error' });
