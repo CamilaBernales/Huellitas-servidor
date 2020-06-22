@@ -1,5 +1,6 @@
 const Compra = require('../models/Compra');
 const Producto = require('../models/Producto');
+const ProductoCompra = require('../models/ProductoCompra');
 const { validationResult } = require('express-validator');
 
 exports.crearCompra = async (req,res,next) => {
@@ -14,7 +15,7 @@ exports.crearCompra = async (req,res,next) => {
       if (!producto) {
         return res.status(400).json({ msg: `El producto ${producto.nombre} no existe.` });
       }
-      if (producto.disponibilidad) {
+      if (!producto.disponibilidad) {
         return res.status(400).json({ msg: `El producto ${producto.nombre} no está disponible.` });
       }
     }
@@ -33,6 +34,11 @@ exports.crearCompra = async (req,res,next) => {
 exports.obtenerCompras = async(req, res) => {
   try {
     const compras = await Compra.find({});
+    for (let index = 0; index < compras.length; index++) {
+      const compra = compras[index]._doc._id;
+      console.log(compra);
+      compras[index]._doc.pedido = await ProductoCompra.find({compra});
+    }
     res.status(200).json(compras);
   } catch (error) {
     res.status(500).json({ msg: 'Hubo un error' });

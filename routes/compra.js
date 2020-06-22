@@ -4,6 +4,7 @@ const compraController = require('../controllers/compraController');
 const productocompraController = require('../controllers/productocompraController');
 const { check } = require('express-validator');
 const auth = require('../middleware/auth');
+const authrol = require('../middleware/authrol');
 
 
 router.post('/',
@@ -21,6 +22,6 @@ router.post('/',
   productocompraController.crearProductoCompra
 );
 
-router.get('/listado', auth, compraController.obtenerCompras);
+router.get('/listado', auth, authrol, compraController.obtenerCompras);
 
 module.exports = router;
