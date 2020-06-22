@@ -8,10 +8,10 @@ exports.crearTurno = async (req, res) => {
   if (!errores.isEmpty()) {
     return res.status(422).json({ errores: errores.array() });
   }
-
+  
   const { fecha, hora, contacto } = req.body;
   try {
-    let turno = await Turno.findOne({ fecha, hora });
+    let turno = await Turno.findOne({ fecha, hora, contacto });
     let fechaActual = moment().format("YYYY-MM-DD");
     if (turno) {
       return res
@@ -28,7 +28,7 @@ exports.crearTurno = async (req, res) => {
     }
     numbervalidation = /^(15)?[0-9]{7,10}/
     if(!contacto.match(numbervalidation)){
-      return res.status(403).json({ msg: "Número no válido" });
+      return res.status(403).json({ msg: "Numero no válido" });
     }
     turno = new Turno(req.body);
     turno.dueño = req.usuario.id;
