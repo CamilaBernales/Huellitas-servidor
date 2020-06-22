@@ -10,7 +10,7 @@ exports.crearMensaje = async (req, res)  => {
         // Creamos el Mensaje
         mensaje = new Mensaje(req.body);
         
-        // Guardamos el usuario en la BD
+        // Guardamos el mensaje en la BD
         await mensaje.save();
         res.json({ msg: 'Mensaje enviado correctamente'});
     } catch (error) {
