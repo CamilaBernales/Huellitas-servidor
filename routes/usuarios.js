@@ -27,6 +27,8 @@ router.get(
   usuarioController.ObtenerUsuarios
 );
 router.get("/obtenerusuario/:id", auth, authrol, usuarioController.ObtenerUsuario);
-router.put("/cambiarrol/:id", auth, authrol, usuarioController.cambiarRol);
+router.put("/otorgarpermisos/:id", auth, authrol, usuarioController.cambiarRol);
+router.put("/quitarpermisos/:id", auth, authrol, usuarioController.quitarPermisos);
+
 
 module.exports = router;

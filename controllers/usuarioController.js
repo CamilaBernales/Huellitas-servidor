@@ -58,7 +58,7 @@ exports.crearUsuario = async (req, res) => {
 //obtener un usuario
 exports.ObtenerUsuario = async (req, res) => {
   try {
-    const usuario = await Usuario.findById(req.params.id).select('nombre');
+    const usuario = await Usuario.findById(req.params.id).select("nombre");
     res.json({ usuario });
   } catch (error) {
     res.status(500).send("Hubo un error");
@@ -68,16 +68,29 @@ exports.ObtenerUsuario = async (req, res) => {
 //obtener listado usuarios
 exports.ObtenerUsuarios = async (req, res) => {
   try {
-    const usuarios = await Usuario.find({ rol: { $eq: "usuario" } }).select(
-      "nombre email rol"
-    );
+    const usuarios = await Usuario.find({})
+      .select("nombre email rol")
+      .sort("rol");
     res.json(usuarios);
   } catch (error) {
     res.status(500).json({ msg: "Hubo un error." });
   }
 };
-
-//cambiar rol de usuario
+//cambiar rol de admin a usuario
+exports.quitarPermisos = async (req, res) => {
+  try {
+    const admin = await Usuario.findOneAndUpdate(
+      { _id: req.params.id },
+      { rol: "usuario" },
+      { new: true }
+    );
+    res.json({ admin });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Hubo un error." });
+  }
+};
+//cambiar rol de usuario a administrador
 exports.cambiarRol = async (req, res) => {
   try {
     const usuario = await Usuario.findOneAndUpdate(

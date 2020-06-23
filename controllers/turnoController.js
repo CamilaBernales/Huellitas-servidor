@@ -83,7 +83,7 @@ exports.obtenerHorariosDisponibles = async (req, res) => {
 //obtener turnos
 exports.obtenerTurnos = async (req, res) => {
   try {
-    const turnos = await Turno.find({});
+    const turnos = await Turno.find({}).sort('fecha');
     res.json(turnos);
   } catch (error) {
     res.status(500).json({ msg: "Hubo un error." });
