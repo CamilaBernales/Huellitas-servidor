@@ -15,7 +15,7 @@ exports.crearCompra = async (req,res,next) => {
       if (!producto) {
         return res.status(400).json({ msg: `El producto ${producto.nombre} no existe.` });
       }
-      if (!producto.disponibilidad) {
+      if (!(producto.disponibilidad === 'Disponible')) {
         return res.status(400).json({ msg: `El producto ${producto.nombre} no está disponible.` });
       }
     }
@@ -34,10 +34,14 @@ exports.crearCompra = async (req,res,next) => {
 exports.obtenerCompras = async(req, res) => {
   try {
     const compras = await Compra.find({});
-    for (let index = 0; index < compras.length; index++) {
-      const compra = compras[index]._doc._id;
-      console.log(compra);
-      compras[index]._doc.pedido = await ProductoCompra.find({compra});
+    for (let i = 0; i < compras.length; i++) {
+      const compra = compras[i]._doc._id;
+      compras[i]._doc.pedido = await ProductoCompra.find({compra}, {fecha: 0});
+      for (let j = 0; j < compras[i]._doc.pedido.length; j++) {
+        const producto = compras[i]._doc.pedido[j]._doc.producto;
+        const productonombre = await Producto.find(producto);
+        compras[i]._doc.pedido[j]._doc.nombre = productonombre[0].nombre; 
+      }
     }
     res.status(200).json(compras);
   } catch (error) {

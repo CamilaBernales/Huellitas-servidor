@@ -9,6 +9,7 @@ const authrol = require('../middleware/authrol');
 
 router.post('/',
   auth,
+  authrol,
   [
     check('direccion', 'La dirección es obligatoria').notEmpty(),
     check('codigoPostal', 'El código postal es obligatorio').notEmpty(),

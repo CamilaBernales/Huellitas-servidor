@@ -40,6 +40,7 @@ exports.autenticarUsuario = async (req, res) => {
       },
       (error, token) => {
         if (error) throw error;
+        usuario.password = undefined;
         res.json({
           token,
           usuario,
