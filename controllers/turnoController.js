@@ -11,8 +11,20 @@ exports.crearTurno = async (req, res) => {
 
   const { fecha, hora, contacto } = req.body;
   try {
+    const usuario = await Usuario.findById(req.usuario.id).select("_id");
     let turno = await Turno.findOne({ fecha, hora, contacto });
     let fechaActual = moment().format("YYYY-MM-DD");
+    let dueñoValidacion = await Turno.findOne({
+      dueño: usuario,
+      fecha,
+      hora,
+      contacto,
+    });
+    if (dueñoValidacion) {
+      return res
+        .status(403)
+        .json({ msg: "No puedes reservar más de una vez por día." });
+    }
     if (turno) {
       return res
         .status(403)
@@ -33,13 +45,7 @@ exports.crearTurno = async (req, res) => {
     }
     turno = new Turno(req.body);
     turno.dueño = req.usuario.id;
-    // let dueño = await Turno.findOne(turno.dueño);
-    // console.log(dueño);
-    // if (dueño) {
-    //   return res
-    //     .status(403)
-    //     .json({ msg: "No puedes reservar más de una vez por día." });
-    // }
+
     await turno.save();
     res.json({ msg: "Turno creado correctamente" });
   } catch (error) {
