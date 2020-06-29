@@ -9,16 +9,15 @@ exports.crearTurno = async (req, res) => {
     return res.status(422).json({ errores: errores.array() });
   }
 
-  const { fecha, hora, contacto } = req.body;
+  const { fecha, hora} = req.body;
   try {
     const usuario = await Usuario.findById(req.usuario.id).select("_id");
-    let turno = await Turno.findOne({ fecha, hora, contacto });
+    let turno = await Turno.findOne({ fecha, hora});
     let fechaActual = moment().format("YYYY-MM-DD");
     let dueñoValidacion = await Turno.findOne({
       dueño: usuario,
       fecha,
-      hora,
-      contacto,
+      hora
     });
     if (dueñoValidacion) {
       return res
