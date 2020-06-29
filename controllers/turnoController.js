@@ -12,7 +12,7 @@ exports.crearTurno = async (req, res) => {
   const { fecha, hora, contacto} = req.body;
   try {
     const usuario = await Usuario.findById(req.usuario.id).select("_id");
-    let turno = await Turno.findOne({ fecha, hora, contacto});
+    let turno = await Turno.findOne({ fecha, hora});
     let fechaActual = moment().format("YYYY-MM-DD");
     let dueñoValidacion = await Turno.findOne({
       dueño: usuario,
