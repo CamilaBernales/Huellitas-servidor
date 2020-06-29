@@ -58,7 +58,7 @@ exports.crearUsuario = async (req, res) => {
 //obtener un usuario
 exports.ObtenerUsuario = async (req, res) => {
   try {
-    const usuario = await Usuario.findById(req.params.id).select("nombre");
+    const usuario = await Usuario.findById(req.usuario.id).select("nombre email imagen");
     res.json({ usuario });
   } catch (error) {
     res.status(500).send("Hubo un error");
@@ -99,6 +99,21 @@ exports.cambiarRol = async (req, res) => {
       { new: true }
     );
     res.json({ usuario });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Hubo un error." });
+  }
+};
+exports.updateUsuario = async (req, res) => {
+  try {
+    const usuario = await Usuario.findOneAndUpdate(
+      { _id: req.params.id },
+      req.body,
+      {
+        new: true,
+      }
+    );
+    res.json(usuario);
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Hubo un error." });

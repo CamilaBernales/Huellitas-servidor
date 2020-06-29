@@ -30,7 +30,7 @@ router.post(
 //traer horarios disponibles
 router.get("/horariosdip/:fecha", turnoController.obtenerHorariosDisponibles);
 //borrar turno
-router.delete("/delete/:id", auth, authrol, turnoController.eliminarTurno);
+router.delete("/delete/:id", auth, turnoController.eliminarTurno);
 //obtener TODOS los turnos
 router.get("/listadoturnos", auth, authrol, turnoController.obtenerTurnos);
 //obtener turnos de un usuario especifico

@@ -26,6 +26,10 @@ const UsuarioSchema = mongoose.Schema({
     required: true,
     default: "usuario",
   },
+  imagen: {
+    type: String,
+    default : 'https://www.ganaderia.com/img/default.jpg'
+  }
 });
 
 module.exports = mongoose.model("Usuario", UsuarioSchema);

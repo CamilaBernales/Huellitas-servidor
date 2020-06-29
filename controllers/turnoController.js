@@ -8,7 +8,7 @@ exports.crearTurno = async (req, res) => {
   if (!errores.isEmpty()) {
     return res.status(422).json({ errores: errores.array() });
   }
-  
+
   const { fecha, hora, contacto } = req.body;
   try {
     let turno = await Turno.findOne({ fecha, hora, contacto });
@@ -18,6 +18,7 @@ exports.crearTurno = async (req, res) => {
         .status(403)
         .json({ msg: "Elija una fecha y un horario que este disponible." });
     }
+
     if (fecha <= fechaActual) {
       return res
         .status(403)
@@ -26,12 +27,19 @@ exports.crearTurno = async (req, res) => {
     if (moment(fecha).day() === 0) {
       return res.status(403).json({ msg: "No atendemos los domingos." });
     }
-    numbervalidation = /^(15)?[0-9]{7,10}/
-    if(!contacto.match(numbervalidation)){
+    numbervalidation = /^(15)?[0-9]{7,10}/;
+    if (!contacto.match(numbervalidation)) {
       return res.status(403).json({ msg: "Numero no válido" });
     }
     turno = new Turno(req.body);
     turno.dueño = req.usuario.id;
+    // let dueño = await Turno.findOne(turno.dueño);
+    // console.log(dueño);
+    // if (dueño) {
+    //   return res
+    //     .status(403)
+    //     .json({ msg: "No puedes reservar más de una vez por día." });
+    // }
     await turno.save();
     res.json({ msg: "Turno creado correctamente" });
   } catch (error) {
@@ -64,7 +72,7 @@ exports.obtenerHorariosDisponibles = async (req, res) => {
     "19:30",
     "20:00",
     "20:30",
-    "21:00"
+    "21:00",
   ];
   try {
     let turnos = await Turno.find({ fecha: req.params.fecha });
@@ -83,7 +91,7 @@ exports.obtenerHorariosDisponibles = async (req, res) => {
 //obtener turnos
 exports.obtenerTurnos = async (req, res) => {
   try {
-    const turnos = await Turno.find({}).sort('fecha');
+    const turnos = await Turno.find({}).sort("fecha, hora");
     res.json(turnos);
   } catch (error) {
     res.status(500).json({ msg: "Hubo un error." });
@@ -92,8 +100,8 @@ exports.obtenerTurnos = async (req, res) => {
 //obtener todos los turnos de un usuario en especifico
 exports.obtenerTurnosUsuario = async (req, res) => {
   try {
-    const usuario = await Usuario.findById(req.usuario.id).select('_id');
-    const turnos = await Turno.find({dueño: usuario}).sort('fecha')
+    const usuario = await Usuario.findById(req.usuario.id).select("_id");
+    const turnos = await Turno.find({ dueño: usuario }).sort("fecha");
     return res.json({ turnos });
   } catch (error) {
     res.status(500).json({ msg: "Hubo un error." });
