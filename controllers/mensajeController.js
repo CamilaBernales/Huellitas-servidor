@@ -18,3 +18,11 @@ exports.crearMensaje = async (req, res)  => {
         res.status(400).json({ msg: 'Hubo un error.'});
     }
 };
+exports.obtenerMensajes = async (req, res) => {
+    try {
+      const mensajes = await Mensaje.find({}).sort("fecha, hora");
+      res.json(mensajes);
+    } catch (error) {
+      res.status(500).json({ msg: "Hubo un error." });
+    }
+  };

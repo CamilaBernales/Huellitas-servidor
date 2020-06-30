@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const mensajeCotroller = require('../controllers/mensajeController')
 const { check } = require('express-validator')
-
+const auth = require("../middleware/auth");
+const authrol = require("../middleware/authrol");
 //Crea el mensaje
 router.post('/',
     [
@@ -13,4 +14,5 @@ router.post('/',
     ],
     mensajeCotroller.crearMensaje
 )
+router.get('/listadomensajes', auth, authrol, mensajeCotroller.obtenerMensajes)
 module.exports = router

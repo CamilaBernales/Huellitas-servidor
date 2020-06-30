@@ -58,7 +58,9 @@ exports.crearUsuario = async (req, res) => {
 //obtener un usuario
 exports.ObtenerUsuario = async (req, res) => {
   try {
-    const usuario = await Usuario.findById(req.usuario.id).select("nombre email imagen");
+    const usuario = await Usuario.findById(req.usuario.id).select(
+      "nombre email imagen"
+    );
     res.json({ usuario });
   } catch (error) {
     res.status(500).send("Hubo un error");

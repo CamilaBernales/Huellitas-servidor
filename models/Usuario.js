@@ -29,6 +29,9 @@ const UsuarioSchema = mongoose.Schema({
   imagen: {
     type: String,
     default : 'https://www.ganaderia.com/img/default.jpg'
+  },
+  telefono:{
+    type: Number
   }
 });
 
