@@ -3,7 +3,7 @@ const Usuario = require("../models/Usuario");
 const moment = require("moment");
 
 exports.crearTurno = async (req, res) => {
-  const { fecha, hora, contacto } = req.body;
+  const { fecha, hora, telefono } = req.body;
   try {
     const usuario = await Usuario.findById(req.usuario.id).select("_id");
     let turno = await Turno.findOne({ fecha, hora });
@@ -32,7 +32,7 @@ exports.crearTurno = async (req, res) => {
       return res.status(403).json({ msg: "No atendemos los domingos." });
     }
     numbervalidation = /^(381)?[0-9]{8,10}/;
-    if (!telefono.match(numbervalidation) || telefono.length > 10 || telefono.length < 8) {
+    if (!telefono.match(numbervalidation)) {
       return res.status(403).json({ msg: "Numero no válido" });
     }
     turno = new Turno(req.body);

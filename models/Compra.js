@@ -35,6 +35,7 @@ const CompraSchema = mongoose.Schema({
     type: Number,
     required: true
   }
+  
 });
 
 module.exports = mongoose.model("Compra", CompraSchema);
