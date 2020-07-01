@@ -6,7 +6,7 @@ exports.crearMensaje = async (req, res) => {
   const { email } = req.body;
 
   try {
-    if (!email.match(!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i)) {
+    if (!email.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i)) {
       return res.status(403).json({ msg: "Ingrese un email válido." });
     }
     let mensaje;
