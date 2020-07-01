@@ -14,13 +14,15 @@ exports.crearUsuario = async (req, res) => {
         .status(403)
         .json({ msg: "La contraseña debe ser de más de seis carácteres." });
     }
-    numbervalidation = /^(381)?[0-9]{8,10}/;
-    if (
-      !telefono.match(numbervalidation) ||
-      telefono.length > 10 ||
-      telefono.length < 8
-    ) {
-      return res.status(403).json({ msg: "Numero no válido" });
+    if (telefono.length !== 0) {
+      numbervalidation = /^(381)?[0-9]{8,10}/;
+      if (
+        !telefono.match(numbervalidation) ||
+        telefono.length > 10 ||
+        telefono.length < 8
+      ) {
+        return res.status(403).json({ msg: "Numero no válido" });
+      }
     }
     let usuario = await Usuario.findOne({ email });
     if (usuario) {
@@ -117,13 +119,15 @@ exports.updateUsuario = async (req, res) => {
     if (!email.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i)) {
       return res.status(403).json({ msg: "Ingrese un email válido." });
     }
-    numbervalidation = /^(381)?[0-9]{8,10}/;
-    if (
-      !telefono.match(numbervalidation) ||
-      telefono.length > 10 ||
-      telefono.length < 8
-    ) {
-      return res.status(403).json({ msg: "Numero no válido" });
+    if (telefono.length !== 0) {
+      numbervalidation = /^(381)?[0-9]{8,10}/;
+      if (
+        !telefono.match(numbervalidation) ||
+        telefono.length > 10 ||
+        telefono.length < 8
+      ) {
+        return res.status(403).json({ msg: "Numero no válido" });
+      }
     }
     const usuario = await Usuario.findOneAndUpdate(
       { _id: req.params.id },
