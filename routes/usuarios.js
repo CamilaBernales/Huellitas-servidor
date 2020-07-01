@@ -13,7 +13,6 @@ router.post(
     check("email", "El email es obligatorio.").notEmpty(),
     check("email", "Ingrese un email válido.").isEmail(),
     check("password", "El password es obligatorio.").notEmpty(),
-    check("telefono", "Teléfono no válido,.").isNumeric(),
     check(
       "password",
       "El password debe ser de al menos 6 caracteres."
@@ -42,7 +41,8 @@ router.put(
     check("nombre", "El nombre es obligatorio.").notEmpty(),
     check("email", "El email es obligatorio.").notEmpty(),
     check("email", "Ingrese un email válido.").isEmail(),
-    check("telefono", "Teléfono no válido,.").isNumeric(),
+    check("telefono", "Número de teléfono no valido.").isLength({ max: 10 }),
+    check("telefono", "Número de teléfono no valido.").isLength({ min: 8 }),
   ],
   usuarioController.updateUsuario
 );

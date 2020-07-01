@@ -1,35 +1,40 @@
 const Usuario = require("../models/Usuario");
 const bcryptjs = require("bcryptjs");
-const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 // Crear Usuario
 exports.crearUsuario = async (req, res) => {
-  // Validación de campos
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
-  }
-
   // Extraer email y password
-  const { email, password } = req.body;
-
+  const { email, password, telefono } = req.body;
   try {
-    let usuario = await Usuario.findOne({ email });
-
-    if (usuario) {
-      return res.status(400).json({ msg: "El email ingresado ya esta usado." });
+    if (!email.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i)) {
+      return res.status(403).json({ msg: "Ingrese un email válido." });
     }
-
+    if (password.length < 6) {
+      return res
+        .status(403)
+        .json({ msg: "La contraseña debe ser de más de seis carácteres." });
+    }
+    numbervalidation = /^(381)?[0-9]{8,10}/;
+    if (
+      !telefono.match(numbervalidation) ||
+      telefono.length > 10 ||
+      telefono.length < 8
+    ) {
+      return res.status(403).json({ msg: "Numero no válido" });
+    }
+    let usuario = await Usuario.findOne({ email });
+    if (usuario) {
+      return res
+        .status(400)
+        .json({ msg: "El email ingresado ya esta siendo usado." });
+    }
     // Creamos el usuario
     usuario = new Usuario(req.body);
-
     // Hashear password
     const salt = await bcryptjs.genSalt(10);
     usuario.password = await bcryptjs.hash(password, salt);
-
     // Guardamos el usuario en la BD
     await usuario.save();
-
     //payload
     const payload = {
       usuario: {
@@ -107,7 +112,19 @@ exports.cambiarRol = async (req, res) => {
   }
 };
 exports.updateUsuario = async (req, res) => {
+  const { email, telefono } = req.body;
   try {
+    if (!email.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i)) {
+      return res.status(403).json({ msg: "Ingrese un email válido." });
+    }
+    numbervalidation = /^(381)?[0-9]{8,10}/;
+    if (
+      !telefono.match(numbervalidation) ||
+      telefono.length > 10 ||
+      telefono.length < 8
+    ) {
+      return res.status(403).json({ msg: "Numero no válido" });
+    }
     const usuario = await Usuario.findOneAndUpdate(
       { _id: req.params.id },
       req.body,

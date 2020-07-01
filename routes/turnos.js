@@ -21,9 +21,11 @@ router.post(
     ).isLength({ max: 200 }),
     check("fecha", "La fecha de tu turno es obligatoria.").notEmpty(),
     check("hora", "La hora del turno es obligatoria").notEmpty(),
-    check("contacto", "Tu número de teléfono es obligatorio.").notEmpty(),
-    check("contacto", "Ingrese un número de teléfono válido.").isNumeric(),
-    check("contacto", "Número de teléfono no valido.").isLength({ max: 10 }),
+    check("telefono", "Tu número de teléfono es obligatorio.").notEmpty(),
+    check("telefono", "Ingrese un número de teléfono válido.").isNumeric(),
+    check("telefono", "Número de teléfono no valido.").isLength({ max: 10 }),
+    check("telefono", "Número de teléfono no valido.").isLength({ min: 8 }),
+
   ],
   turnoController.crearTurno
 );

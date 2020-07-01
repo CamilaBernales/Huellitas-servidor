@@ -1,18 +1,12 @@
 const Turno = require("../models/Turno");
 const Usuario = require("../models/Usuario");
-const { validationResult } = require("express-validator");
 const moment = require("moment");
 
 exports.crearTurno = async (req, res) => {
-  const errores = validationResult(req);
-  if (!errores.isEmpty()) {
-    return res.status(422).json({ errores: errores.array() });
-  }
-
-  const { fecha, hora, contacto} = req.body;
+  const { fecha, hora, contacto } = req.body;
   try {
     const usuario = await Usuario.findById(req.usuario.id).select("_id");
-    let turno = await Turno.findOne({ fecha, hora});
+    let turno = await Turno.findOne({ fecha, hora });
     let fechaActual = moment().format("YYYY-MM-DD");
     let dueñoValidacion = await Turno.findOne({
       dueño: usuario,
@@ -37,8 +31,8 @@ exports.crearTurno = async (req, res) => {
     if (moment(fecha).day() === 0) {
       return res.status(403).json({ msg: "No atendemos los domingos." });
     }
-    numbervalidation = /^(15)?[0-9]{7,10}/;
-    if (!contacto.match(numbervalidation)) {
+    numbervalidation = /^(381)?[0-9]{8,10}/;
+    if (!telefono.match(numbervalidation) || telefono.length > 10 || telefono.length < 8) {
       return res.status(403).json({ msg: "Numero no válido" });
     }
     turno = new Turno(req.body);

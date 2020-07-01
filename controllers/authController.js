@@ -1,15 +1,8 @@
 const Usuario = require("../models/Usuario");
 const bcryptjs = require("bcryptjs");
-const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 
 exports.autenticarUsuario = async (req, res) => {
-  const errores = validationResult(req);
-  if (!errores.isEmpty()) {
-    return res.status(422).json({
-      errores: errores.array(),
-    });
-  }
   const { email, password } = req.body;
   try {
     let usuario = await Usuario.findOne({
@@ -19,6 +12,9 @@ exports.autenticarUsuario = async (req, res) => {
       return res.status(403).json({
         msg: "El usuario no existe.",
       });
+    }
+    if (!email.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i)) {
+      return res.status(403).json({ msg: "Ingrese un email válido." });
     }
     const passCorrecto = await bcryptjs.compare(password, usuario.password);
     if (!passCorrecto) {

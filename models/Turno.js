@@ -37,7 +37,7 @@ const TurnoSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  contacto: {
+  telefono: {
     type: Number,
     required: true,
   },
