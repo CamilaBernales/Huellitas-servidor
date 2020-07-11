@@ -15,6 +15,9 @@ const MensajeSchema = mongoose.Schema({
         type: String,
         require: true,
         trim: true
+    },
+    created_at:{
+        type: String,
     }
     
 }) 
