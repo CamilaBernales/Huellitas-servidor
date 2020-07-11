@@ -23,7 +23,7 @@ exports.crearMensaje = async (req, res) => {
     res.status(400).json({ msg: "Hubo un error." });
   }
 };
-exports.obtenerMensajes = async ( res) => {
+exports.obtenerMensajes = async (req, res) => {
   try {
     const mensajes = await Mensaje.find({}).sort("created_at");
     res.json(mensajes);
