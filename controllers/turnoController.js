@@ -32,7 +32,11 @@ exports.crearTurno = async (req, res) => {
       return res.status(403).json({ msg: "No atendemos los domingos." });
     }
     numbervalidation = /^(381)?[0-9]{8,10}/;
-    if (!telefono.match(numbervalidation)) {
+    if (
+      !telefono.match(numbervalidation) ||
+      telefono.length > 10 ||
+      telefono.length < 8
+    ) {
       return res.status(403).json({ msg: "Numero no válido" });
     }
     turno = new Turno(req.body);
