@@ -61,6 +61,7 @@ exports.obtenerProducto = async (req, res) => {
 exports.ObtenerProductoFiltrado = async (req, res) => {
   try {
     const { nombre, tipoproducto } = req.query;
+    console.log(nombre)
     const productosfiltrados = await Producto.find({
       nombre: { $regex: ".*" + nombre + ".*", $options: "i" },
       tipoproducto:  { $regex: ".*" + tipoproducto + ".*", $options: "i" },

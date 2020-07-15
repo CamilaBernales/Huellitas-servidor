@@ -125,3 +125,29 @@ exports.eliminarTurno = async (req, res) => {
     res.status(500).json({ msg: "Hubo un error." });
   }
 };
+exports.obtenerFiltros = async (req, res) => {
+  try {
+    const { fecha } = req.query;
+    let turnosFiltrados;
+    let fechaActual = moment().format("YYYY-MM-DD");
+    let proxSemana = moment().add(7, "days").format("YYYY-MM-DD");
+    if (fecha === "proximasemana") {
+      turnosFiltrados = await Turno.find({
+        fecha: {
+          $gte: proxSemana,
+        },
+      });
+    } else if (fecha === "hoy") {
+      turnosFiltrados = await Turno.find({
+        fecha: {
+          $eq: fechaActual,
+        },
+      });
+    } else {
+      turnosFiltrados = await Turno.find({});
+    }
+    res.json(turnosFiltrados);
+  } catch (error) {
+    console.log(error);
+  }
+};

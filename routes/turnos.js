@@ -25,7 +25,6 @@ router.post(
     check("telefono", "Ingrese un número de teléfono válido.").isNumeric(),
     check("telefono", "Número de teléfono no valido.").isLength({ max: 10 }),
     check("telefono", "Número de teléfono no valido.").isLength({ min: 8 }),
-
   ],
   turnoController.crearTurno
 );
@@ -37,5 +36,6 @@ router.delete("/delete/:id", auth, turnoController.eliminarTurno);
 router.get("/listadoturnos", auth, authrol, turnoController.obtenerTurnos);
 //obtener turnos de un usuario especifico
 router.get("/listadoturno", auth, turnoController.obtenerTurnosUsuario);
+router.get("/turnosfiltrados", auth, authrol, turnoController.obtenerFiltros);
 
 module.exports = router;

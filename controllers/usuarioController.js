@@ -14,8 +14,8 @@ exports.crearUsuario = async (req, res) => {
         .status(403)
         .json({ msg: "La contraseña debe ser de más de seis carácteres." });
     }
-    if (telefono!== '' && telefono!== undefined) {
-        let numbervalidation = /^(381)?[0-9]{8,10}/;
+    if (telefono !== "" && telefono !== undefined) {
+      let numbervalidation = /^(381)?[0-9]{8,10}/;
       if (
         !telefono.match(numbervalidation) ||
         telefono.length > 10 ||
@@ -119,8 +119,8 @@ exports.updateUsuario = async (req, res) => {
     if (!email.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i)) {
       return res.status(403).json({ msg: "Ingrese un email válido." });
     }
-    console.log(telefono)
-    if (telefono!== '' && telefono!== undefined) {
+    console.log(telefono);
+    if (telefono !== "" && telefono !== undefined) {
       let numbervalidation = /^(381)?[0-9]{8,10}/;
       if (
         !telefono.match(numbervalidation) ||
