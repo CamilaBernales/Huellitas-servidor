@@ -19,7 +19,6 @@ const MensajeSchema = mongoose.Schema({
     created_at:{
         type: String,
     }
-    
 }) 
 
 module.exports = mongoose.model('Mensaje', MensajeSchema)

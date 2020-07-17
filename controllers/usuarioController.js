@@ -77,9 +77,14 @@ exports.ObtenerUsuario = async (req, res) => {
 //obtener listado usuarios
 exports.ObtenerUsuarios = async (req, res) => {
   try {
-    const usuarios = await Usuario.find({})
-      .select("nombre email rol")
-      .sort("rol");
+    const {pagina} = req.query
+    const options ={
+      page: pagina,
+      limit: 10,
+      select: "nombre email rol",
+      sort: "rol"
+    }
+    const usuarios = await Usuario.paginate({}, options)
     res.json(usuarios);
   } catch (error) {
     res.status(500).json({ msg: "Hubo un error." });

@@ -93,7 +93,13 @@ exports.obtenerHorariosDisponibles = async (req, res) => {
 //obtener turnos
 exports.obtenerTurnos = async (req, res) => {
   try {
-    const turnos = await Turno.find({}).sort("fecha, hora");
+    const { pagina } = req.query;
+    const options = {
+      page: pagina,
+      limit: 10,
+      sort: "fecha, hora",
+    };
+    const turnos = await Turno.paginate({}, options);
     res.json(turnos);
   } catch (error) {
     res.status(500).json({ msg: "Hubo un error." });
@@ -102,9 +108,21 @@ exports.obtenerTurnos = async (req, res) => {
 //obtener todos los turnos de un usuario en especifico
 exports.obtenerTurnosUsuario = async (req, res) => {
   try {
+    let fechaActual = moment().format("YYYY-MM-DD");
     const usuario = await Usuario.findById(req.usuario.id).select("_id");
-    const turnos = await Turno.find({ dueño: usuario }).sort("fecha");
-    return res.json({ turnos });
+    const turnosProximos = await Turno.find({
+      dueño: usuario,
+      fecha: {
+        $gte: fechaActual,
+      },
+    }).sort("fecha");
+    const turnosPasados = await Turno.find({
+      dueño: usuario,
+      fecha: {
+        $lt: fechaActual,
+      },
+    }).sort("fecha");
+    return res.json({turnosProximos, turnosPasados});
   } catch (error) {
     res.status(500).json({ msg: "Hubo un error." });
   }
@@ -127,24 +145,34 @@ exports.eliminarTurno = async (req, res) => {
 };
 exports.obtenerFiltros = async (req, res) => {
   try {
-    const { fecha } = req.query;
+    const { fecha, pagina } = req.query;
+    let options = {
+      page: pagina,
+      limit: 10,
+    };
     let turnosFiltrados;
     let fechaActual = moment().format("YYYY-MM-DD");
     let proxSemana = moment().add(7, "days").format("YYYY-MM-DD");
     if (fecha === "proximasemana") {
-      turnosFiltrados = await Turno.find({
-        fecha: {
-          $gte: proxSemana,
+      turnosFiltrados = await Turno.paginate(
+        {
+          fecha: {
+            $gte: proxSemana,
+          },
         },
-      });
+        options
+      );
     } else if (fecha === "hoy") {
-      turnosFiltrados = await Turno.find({
-        fecha: {
-          $eq: fechaActual,
+      turnosFiltrados = await Turno.paginate(
+        {
+          fecha: {
+            $eq: fechaActual,
+          },
         },
-      });
+        options
+      );
     } else {
-      turnosFiltrados = await Turno.find({});
+      turnosFiltrados = await Turno.paginate({}, options);
     }
     res.json(turnosFiltrados);
   } catch (error) {

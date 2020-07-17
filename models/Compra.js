@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const aggregatePaginate = require("mongoose-paginate-v2");
 
 const CompraSchema = mongoose.Schema({
   usuario: {
@@ -37,5 +38,5 @@ const CompraSchema = mongoose.Schema({
   }
   
 });
-
+CompraSchema.plugin(aggregatePaginate);
 module.exports = mongoose.model("Compra", CompraSchema);

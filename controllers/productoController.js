@@ -41,7 +41,15 @@ exports.updateProducto = async (req, res) => {
 //obtener todos los productos
 exports.obtenerProductos = async (req, res) => {
   try {
-    const productos = await Producto.find({});
+    const { pagina } = req.query;
+    const options = {
+      page: pagina,
+      limit: 10,
+      collation: {
+        locale: "en",
+      },
+    };
+    const productos = await Producto.paginate({}, options);
     res.json(productos);
   } catch (error) {
     res.status(500).json({ msg: "Hubo un error." });
@@ -60,12 +68,18 @@ exports.obtenerProducto = async (req, res) => {
 
 exports.ObtenerProductoFiltrado = async (req, res) => {
   try {
-    const { nombre, tipoproducto } = req.query;
-    console.log(nombre)
-    const productosfiltrados = await Producto.find({
-      nombre: { $regex: ".*" + nombre + ".*", $options: "i" },
-      tipoproducto:  { $regex: ".*" + tipoproducto + ".*", $options: "i" },
-    });
+    const { nombre, tipoproducto, pagina } = req.query;
+    const options = {
+      page: pagina,
+      limit: 10
+    };
+    const productosfiltrados = await Producto.paginate(
+      {
+        nombre: { $regex: ".*" + nombre + ".*", $options: "i" },
+        tipoproducto: { $regex: ".*" + tipoproducto + ".*", $options: "i" },
+      },
+      options
+    );
     res.json(productosfiltrados);
   } catch (error) {
     console.log(error);

@@ -23,5 +23,6 @@ router.post('/',
 );
 
 router.get('/listado', auth, authrol, compraController.obtenerCompras);
+router.get('/filtrocompras', auth, authrol, compraController.filtrarCompras);
 
 module.exports = router;

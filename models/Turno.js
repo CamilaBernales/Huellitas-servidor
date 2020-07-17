@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const aggregatePaginate = require("mongoose-paginate-v2");
+
 
 const TurnoSchema = mongoose.Schema({
   nombremascota: {
@@ -42,5 +44,5 @@ const TurnoSchema = mongoose.Schema({
     required: true,
   },
 });
-
+TurnoSchema.plugin(aggregatePaginate);
 module.exports = mongoose.model("Turno", TurnoSchema);
