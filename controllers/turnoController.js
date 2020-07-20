@@ -43,9 +43,8 @@ exports.crearTurno = async (req, res) => {
     turno.dueño = req.usuario.id;
 
     await turno.save();
-    res.json({ msg: "Turno creado correctamente" });
+    res.status(200).json({ msg: "Turno creado correctamente" });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ msg: "Hubo un error." });
   }
 };
@@ -83,7 +82,7 @@ exports.obtenerHorariosDisponibles = async (req, res) => {
       const hdisp = horarios.filter(
         (horario) => !turnos.some((turno) => horario === turno.hora)
       );
-      res.json({ hdisp });
+      res.status(200).json({ hdisp });
     }
   } catch (error) {
     res.status(500).json({ msg: "Hubo un error." });
@@ -100,7 +99,7 @@ exports.obtenerTurnos = async (req, res) => {
       sort: "fecha, hora",
     };
     const turnos = await Turno.paginate({}, options);
-    res.json(turnos);
+    res.status(200).json(turnos);
   } catch (error) {
     res.status(500).json({ msg: "Hubo un error." });
   }
@@ -122,7 +121,7 @@ exports.obtenerTurnosUsuario = async (req, res) => {
         $lt: fechaActual,
       },
     }).sort("fecha");
-    return res.json({turnosProximos, turnosPasados});
+    return res.status(200).json({turnosProximos, turnosPasados});
   } catch (error) {
     res.status(500).json({ msg: "Hubo un error." });
   }
@@ -139,7 +138,6 @@ exports.eliminarTurno = async (req, res) => {
     await Turno.findByIdAndRemove({ _id: req.params.id });
     res.json({ msg: "Turno eliminado correctamente." });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ msg: "Hubo un error." });
   }
 };
@@ -174,8 +172,8 @@ exports.obtenerFiltros = async (req, res) => {
     } else {
       turnosFiltrados = await Turno.paginate({}, options);
     }
-    res.json(turnosFiltrados);
+    res.status(200).json(turnosFiltrados);
   } catch (error) {
-    console.log(error);
+    res.status(500).json({ msg: "Hubo un error" });
   }
 };

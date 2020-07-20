@@ -1,7 +1,7 @@
 const Compra = require("../models/Compra");
 const Producto = require("../models/Producto");
 const ProductoCompra = require("../models/ProductoCompra");
-const moment = require("moment");
+const Usuario = require("../models/Usuario");
 
 exports.crearCompra = async (req, res, next) => {
   try {
@@ -26,38 +26,13 @@ exports.crearCompra = async (req, res, next) => {
     req.body.compra = compraId;
     next();
   } catch (error) {
-    console.error(error);
     res.status(500).json({ msg: "Hubo un error" });
   }
 };
 
 exports.obtenerCompras = async (req, res) => {
   try {
-    const compras = await Compra.find({});
-    for (let i = 0; i < compras.length; i++) {
-      const compra = compras[i]._doc._id;
-      compras[i]._doc.pedido = await ProductoCompra.find(
-        { compra },
-        { fecha: 0 }
-      );
-      for (let j = 0; j < compras[i]._doc.pedido.length; j++) {
-        const producto = compras[i]._doc.pedido[j]._doc.producto;
-        const productonombre = await Producto.find(producto);
-        compras[i]._doc.pedido[j]._doc.nombre = productonombre[0].nombre;
-      }
-    }
-    res.status(200).json(compras);
-  } catch (error) {
-    res.status(500).json({ msg: "Hubo un error" });
-  }
-};
-
-exports.filtrarCompras = async (req, res) => {
-  try {
-    const { fecha, nombre, pagina } = req.query;
-    const compras = await Compra.paginate({
-      nombre: { $regex: ".*" + nombre + ".*", $options: "i" },
-    });
+    const compras = await Compra.paginate({});
     for (let i = 0; i < compras.docs.length; i++) {
       const compra = compras.docs[i]._doc._id;
       compras.docs[i]._doc.pedido = await ProductoCompra.find(
@@ -72,6 +47,62 @@ exports.filtrarCompras = async (req, res) => {
     }
     res.status(200).json(compras);
   } catch (error) {
-    console.log(error);
+    res.status(500).json({ msg: "Hubo un error" });
+  }
+};
+
+exports.filtrarCompras = async (req, res) => {
+  try {
+    const { nombre, pagina } = req.query;
+    let options = {
+      page: pagina,
+      limit: 10,
+    };
+    const compras = await Compra.paginate(
+      {
+        nombre: { $regex: ".*" + nombre + ".*", $options: "i" },
+      },
+      options
+    );
+    for (let i = 0; i < compras.docs.length; i++) {
+      const compra = compras.docs[i]._doc._id;
+      compras.docs[i]._doc.pedido = await ProductoCompra.find(
+        { compra },
+        { fecha: 0 }
+      );
+      for (let j = 0; j < compras.docs[i]._doc.pedido.length; j++) {
+        const producto = compras.docs[i]._doc.pedido[j]._doc.producto;
+        const productonombre = await Producto.find(producto);
+        compras.docs[i]._doc.pedido[j]._doc.nombre = productonombre[0].nombre;
+      }
+    }
+    res.status(200).json(compras);
+  } catch (error) {
+    res.status(500).json({ msg: "Hubo un error" });
+  }
+};
+
+exports.obtenerComprasUsuario = async (req, res) => {
+  try {
+    // let fechaActual = moment().format("YYYY-MM-DD");
+    const comprador = await Usuario.findById(req.usuario.id).select("_id");
+    const compras = await Compra.find({
+      usuario: comprador,
+    });
+    for (let i = 0; i < compras.length; i++) {
+      const compra = compras[i]._doc._id;
+      compras[i]._doc.pedido = await ProductoCompra.find(
+        { compra },
+        { fecha: 0 }
+      );
+      for (let j = 0; j < compras[i]._doc.pedido.length; j++) {
+        const producto = compras[i]._doc.pedido[j]._doc.producto;
+        const productonombre = await Producto.find(producto);
+        compras[i]._doc.pedido[j]._doc.nombre = productonombre[0].nombre;
+      }
+    }
+    return res.status(200).json(compras);
+  } catch (error) {
+    res.status(500).json({ msg: "Hubo un error." });
   }
 };
