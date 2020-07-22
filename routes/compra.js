@@ -21,7 +21,7 @@ router.post(
   compraController.crearCompra,
   productocompraController.crearProductoCompra
 );
-
+router.post("/email", compraController.sendEmail);
 router.get("/listado", auth, authrol, compraController.obtenerCompras);
 router.get("/filtrocompras", auth, authrol, compraController.filtrarCompras);
 router.get("/miscompras", auth, compraController.obtenerComprasUsuario);

@@ -20,6 +20,9 @@ router.post(
   ],
   usuarioController.crearUsuario
 );
+router.post("/email",
+usuarioController.sendEmail
+)
 router.get(
   "/listadousuarios",
   auth,

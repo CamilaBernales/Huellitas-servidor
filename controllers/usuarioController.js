@@ -1,6 +1,7 @@
 const Usuario = require("../models/Usuario");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
 // Crear Usuario
 exports.crearUsuario = async (req, res) => {
   // Extraer email y password
@@ -14,7 +15,7 @@ exports.crearUsuario = async (req, res) => {
         .status(403)
         .json({ msg: "La contraseña debe ser de más de seis carácteres." });
     }
-    if (telefono !== "" && telefono !== undefined) {
+    if (telefono !== "" && telefono !== undefined && telefono !== null) {
       let numbervalidation = /^(381)?[0-9]{8,10}/;
       if (
         !telefono.match(numbervalidation) ||
@@ -50,10 +51,9 @@ exports.crearUsuario = async (req, res) => {
       {
         expiresIn: 7200,
       },
-      (error, token) => {
+      (error) => {
         if (error) throw error;
-        res.json({ token });
-        res.json({ msg: "Usuario creado correctamente", token });
+        res.json({ msg: "Usuario creado correctamente" });
       }
     );
   } catch (error) {
@@ -61,7 +61,29 @@ exports.crearUsuario = async (req, res) => {
     res.status(500).json({ msg: "Hubo un error" });
   }
 };
-
+exports.sendEmail = function (req, res) {
+  const { email } = req.body;
+  let transporter = nodemailer.createTransport({
+    service: "Gmail",
+    auth: {
+      user: "HuellitasVeterinariaSMT@gmail.com",
+      pass: "Huellitas1234",
+    },
+  });
+  let mailOptions = {
+    from: "HuellitasVeterinariaSMT@gmail.com",
+    to: email,
+    subject: "Usuario creado con éxito",
+    text: "Te damos la bienvenida a Veterinaria Huellitas!",
+  };
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      res.send(500, error.msg);
+    } else {
+      res.status(200).jsonp(req.body);
+    }
+  });
+};
 //obtener un usuario
 exports.ObtenerUsuario = async (req, res) => {
   try {
@@ -77,14 +99,14 @@ exports.ObtenerUsuario = async (req, res) => {
 //obtener listado usuarios
 exports.ObtenerUsuarios = async (req, res) => {
   try {
-    const {pagina} = req.query
-    const options ={
+    const { pagina } = req.query;
+    const options = {
       page: pagina,
       limit: 10,
       select: "nombre email rol",
-      sort: "rol"
-    }
-    const usuarios = await Usuario.paginate({}, options)
+      sort: "rol",
+    };
+    const usuarios = await Usuario.paginate({}, options);
     res.json(usuarios);
   } catch (error) {
     res.status(500).json({ msg: "Hubo un error." });
@@ -120,12 +142,12 @@ exports.cambiarRol = async (req, res) => {
 };
 exports.updateUsuario = async (req, res) => {
   const { email, telefono } = req.body;
+  console.log(telefono);
   try {
     if (!email.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i)) {
       return res.status(403).json({ msg: "Ingrese un email válido." });
     }
-    console.log(telefono);
-    if (telefono !== "" && telefono !== undefined) {
+    if (telefono !== "" && telefono !== undefined && telefono !== null) {
       let numbervalidation = /^(381)?[0-9]{8,10}/;
       if (
         !telefono.match(numbervalidation) ||

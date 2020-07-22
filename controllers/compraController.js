@@ -2,6 +2,7 @@ const Compra = require("../models/Compra");
 const Producto = require("../models/Producto");
 const ProductoCompra = require("../models/ProductoCompra");
 const Usuario = require("../models/Usuario");
+const nodemailer = require("nodemailer");
 
 exports.crearCompra = async (req, res, next) => {
   try {
@@ -32,7 +33,12 @@ exports.crearCompra = async (req, res, next) => {
 
 exports.obtenerCompras = async (req, res) => {
   try {
-    const compras = await Compra.paginate({});
+    const { pagina } = req.query;
+    let options = {
+      page: pagina,
+      limit: 10,
+    };
+    const compras = await Compra.paginate({}, options);
     for (let i = 0; i < compras.docs.length; i++) {
       const compra = compras.docs[i]._doc._id;
       compras.docs[i]._doc.pedido = await ProductoCompra.find(
@@ -81,10 +87,32 @@ exports.filtrarCompras = async (req, res) => {
     res.status(500).json({ msg: "Hubo un error" });
   }
 };
+exports.sendEmail = function (req, res) {
+  const { email } = req.body;
+  let transporter = nodemailer.createTransport({
+    service: "Gmail",
+    auth: {
+      user: "HuellitasVeterinariaSMT@gmail.com",
+      pass: "Huellitas1234",
+    },
+  });
+  let mailOptions = {
+    from: "HuellitasVeterinariaSMT@gmail.com",
+    to: email,
+    subject: "Compra realizada con éxito",
+    text: "Gracias por tu compra! Recibiras información de tu pedido en breve.",
+  };
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      res.send(500, error.msg);
+    } else {
+      res.status(200).jsonp(req.body);
+    }
+  });
+};
 
 exports.obtenerComprasUsuario = async (req, res) => {
   try {
-    // let fechaActual = moment().format("YYYY-MM-DD");
     const comprador = await Usuario.findById(req.usuario.id).select("_id");
     const compras = await Compra.find({
       usuario: comprador,
