@@ -44,10 +44,7 @@ exports.obtenerProductos = async (req, res) => {
     const { pagina } = req.query;
     const options = {
       page: pagina,
-      limit: 10,
-      collation: {
-        locale: "en",
-      },
+      limit: 10
     };
     const productos = await Producto.paginate({}, options);
     res.json(productos);
