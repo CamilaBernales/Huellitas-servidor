@@ -17,7 +17,7 @@ exports.crearMensaje = async (req, res) => {
     await mensaje.save();
     console.log(mensaje);
 
-    res.json({ msg: "Mensaje enviado correctamente" });
+    res.status(200).json({ msg: "Mensaje enviado correctamente" });
   } catch (error) {
     console.error(error);
     res.status(400).json({ msg: "Hubo un error." });

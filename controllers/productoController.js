@@ -14,7 +14,7 @@ exports.crearProducto = async (req, res) => {
     }
     producto = new Producto(req.body);
     await producto.save();
-    res.json({ msg: "Producto creado correctamente" });
+    res.status(200).json({ msg: "Producto creado correctamente" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: "Hubo un error" });
@@ -31,7 +31,7 @@ exports.updateProducto = async (req, res) => {
         new: true,
       }
     );
-    res.json(producto);
+    res.status(200).json(producto);
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Hubo un error." });
@@ -47,7 +47,7 @@ exports.obtenerProductos = async (req, res) => {
       limit: 10
     };
     const productos = await Producto.paginate({}, options);
-    res.json(productos);
+    res.status(200).json(productos);
   } catch (error) {
     res.status(500).json({ msg: "Hubo un error." });
   }
@@ -57,7 +57,7 @@ exports.obtenerProductos = async (req, res) => {
 exports.obtenerProducto = async (req, res) => {
   try {
     const producto = await Producto.findById(req.params.id);
-    res.json({ producto });
+    res.status(200).json({ producto });
   } catch (error) {
     res.status(500).send("Hubo un error");
   }
@@ -77,7 +77,7 @@ exports.ObtenerProductoFiltrado = async (req, res) => {
       },
       options
     );
-    res.json(productosfiltrados);
+    res.status(200).json(productosfiltrados);
   } catch (error) {
     console.log(error);
   }

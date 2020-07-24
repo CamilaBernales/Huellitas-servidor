@@ -2,6 +2,7 @@ const Usuario = require("../models/Usuario");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
+const jwtDecode = require("jwt-decode");
 // Crear Usuario
 exports.crearUsuario = async (req, res) => {
   // Extraer email y password
@@ -76,7 +77,7 @@ exports.sendEmail = function (req, res) {
     subject: "Usuario creado con éxito",
     text: "Te damos la bienvenida a Veterinaria Huellitas!",
   };
-  transporter.sendMail(mailOptions, function (error, info) {
+  transporter.sendMail(mailOptions, function (error) {
     if (error) {
       res.send(500, error.msg);
     } else {
@@ -136,13 +137,11 @@ exports.cambiarRol = async (req, res) => {
     );
     res.json({ usuario });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ msg: "Hubo un error." });
   }
 };
 exports.updateUsuario = async (req, res) => {
   const { email, telefono } = req.body;
-  console.log(telefono);
   try {
     if (!email.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i)) {
       return res.status(403).json({ msg: "Ingrese un email válido." });
@@ -166,7 +165,76 @@ exports.updateUsuario = async (req, res) => {
     );
     res.json(usuario);
   } catch (error) {
-    console.log(error);
+    res.status(500).json({ msg: "Hubo un error." });
+  }
+};
+
+exports.resetPassword = async (req, res) => {
+  const { email } = req.body;
+  try {
+    let usuario = await Usuario.findOne({ email }).select("email");
+    if (usuario) {
+      res.status(200).json({ usuario });
+    } else {
+      return res.status(403).json({ msg: "Email no encontrado" });
+    }
+  } catch (error) {
+    res.status(500).json({ msg: "Hubo un error." });
+  }
+};
+exports.sendEmailResetPassword = async (req, res) => {
+  const { email } = req.body;
+  let usuarioID = await Usuario.findOne({ email }).select("_id");
+  if (!usuarioID) {
+    return res.status(403).json({ msg: "Este correo no encontrado. " });
+  }
+  const payload = {
+    id: usuarioID._id,
+  };
+  let encrypted_id = jwt.sign(payload, process.env.SECRET, {
+    expiresIn: 3600,
+  });
+  let transporter = nodemailer.createTransport({
+    service: "Gmail",
+    auth: {
+      user: "HuellitasVeterinariaSMT@gmail.com",
+      pass: "Huellitas1234",
+    },
+  });
+  let mailOptions = {
+    from: "HuellitasVeterinariaSMT@gmail.com",
+    to: email,
+    subject: "Restablecer tu contraseña",
+    html: `  
+    <h3>Has indicado que olvidaste tu contraseña. Si es así, haz clic aquí para crear una nueva:</h3>  
+    <a href="http://localhost:3000/resettingpassword/${encrypted_id}"><button>Crea una nueva contraseña</button></a>
+    <p>Si no querías restablecer tu contraseña, puedes ignorar este correo. La contraseña no se cambiará.</p>
+    `,
+  };
+  transporter.sendMail(mailOptions, function (error) {
+    if (error) {
+      res.status(500).send(error.msg);
+    } else {
+      res.status(200).jsonp(req.body);
+    }
+  });
+};
+
+exports.resettingPassword = async (req, res) => {
+  const { id, password } = req.body;
+  var decoded = jwtDecode(id);
+  try {
+    let usuario = await Usuario.findById(decoded.id);
+    if (usuario) {
+      res.status(200).json({ usuario });
+      const salt = await bcryptjs.genSalt(10);
+      let nuevaContraseña = await bcryptjs.hash(password, salt);
+      usuario.password = nuevaContraseña;
+      await usuario.save();
+    } else {
+      return res.status(400).json({ msg: "Email no encontrado" });
+    }
+  } catch (error) {
     res.status(500).json({ msg: "Hubo un error." });
   }
 };
