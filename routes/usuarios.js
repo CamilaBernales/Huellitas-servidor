@@ -20,7 +20,6 @@ router.post(
   ],
   usuarioController.crearUsuario
 );
-router.post("/email", usuarioController.sendEmail);
 router.get(
   "/listadousuarios",
   auth,
@@ -51,7 +50,6 @@ router.post(
   "/resetpassword",
   usuarioController.resetPassword,
 );
-router.post("/emailresetpassword", usuarioController.sendEmailResetPassword);
 router.put('/resettingpassword', usuarioController.resettingPassword)
 
 module.exports = router;

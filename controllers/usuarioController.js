@@ -50,41 +50,42 @@ exports.crearUsuario = async (req, res) => {
       payload,
       process.env.SECRET,
       {
-        expiresIn: 7200,
+        expiresIn: "365d",
       },
       (error) => {
         if (error) throw error;
         res.json({ msg: "Usuario creado correctamente" });
       }
     );
+
+    //envio de email de bienvenida
+    let transporter = nodemailer.createTransport({
+      service: "Gmail",
+      auth: {
+        user: "HuellitasVeterinariaSMT@gmail.com",
+        pass: "Huellitas1234",
+      },
+    });
+    let mailOptions = {
+      from: "HuellitasVeterinariaSMT@gmail.com",
+      to: email,
+      subject: "Usuario creado con éxito",
+      text: "Te damos la bienvenida a Veterinaria Huellitas!",
+    };
+    transporter.sendMail(mailOptions, function (error) {
+      if (error) {
+          res.status(500).jsonp(error);
+      } else {
+        res.status(200).jsonp(req.body);
+      }
+    });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: "Hubo un error" });
   }
 };
-exports.sendEmail = function (req, res) {
-  const { email } = req.body;
-  let transporter = nodemailer.createTransport({
-    service: "Gmail",
-    auth: {
-      user: "HuellitasVeterinariaSMT@gmail.com",
-      pass: "Huellitas1234",
-    },
-  });
-  let mailOptions = {
-    from: "HuellitasVeterinariaSMT@gmail.com",
-    to: email,
-    subject: "Usuario creado con éxito",
-    text: "Te damos la bienvenida a Veterinaria Huellitas!",
-  };
-  transporter.sendMail(mailOptions, function (error) {
-    if (error) {
-      res.send(500, error.msg);
-    } else {
-      res.status(200).jsonp(req.body);
-    }
-  });
-};
+
 //obtener un usuario
 exports.ObtenerUsuario = async (req, res) => {
   try {
@@ -140,6 +141,7 @@ exports.cambiarRol = async (req, res) => {
     res.status(500).json({ msg: "Hubo un error." });
   }
 };
+
 exports.updateUsuario = async (req, res) => {
   const { email, telefono } = req.body;
   try {
@@ -172,52 +174,44 @@ exports.updateUsuario = async (req, res) => {
 exports.resetPassword = async (req, res) => {
   const { email } = req.body;
   try {
-    let usuario = await Usuario.findOne({ email }).select("email");
+    let usuario = await Usuario.findOne({ email }).select("email _id");
     if (usuario) {
-      res.status(200).json({ usuario });
+      const payload = {
+        id: usuario._id,
+      };
+      let encrypted_id = jwt.sign(payload, process.env.SECRET, {
+        expiresIn: 3600,
+      });
+      let transporter = nodemailer.createTransport({
+        service: "Gmail",
+        auth: {
+          user: "HuellitasVeterinariaSMT@gmail.com",
+          pass: "Huellitas1234",
+        },
+      });
+      let mailOptions = {
+        from: "HuellitasVeterinariaSMT@gmail.com",
+        to: email,
+        subject: "Restablecer tu contraseña",
+        html: `  
+        <h3>Has indicado que olvidaste tu contraseña. Si es así, haz clic aquí para crear una nueva:</h3>  
+        <a href="http://localhost:3000/resettingpassword/${encrypted_id}"><button>Crea una nueva contraseña</button></a>
+        <p>Si no querías restablecer tu contraseña, puedes ignorar este correo. La contraseña no se cambiará.</p>
+        `,
+      };
+      transporter.sendMail(mailOptions, function (error) {
+        if (error) {
+          res.status(500).send(error.msg);
+        } else {
+          res.status(200).jsonp(req.body);
+        }
+      });
     } else {
       return res.status(403).json({ msg: "Email no encontrado" });
     }
   } catch (error) {
     res.status(500).json({ msg: "Hubo un error." });
   }
-};
-exports.sendEmailResetPassword = async (req, res) => {
-  const { email } = req.body;
-  let usuarioID = await Usuario.findOne({ email }).select("_id");
-  if (!usuarioID) {
-    return res.status(403).json({ msg: "Este correo no encontrado. " });
-  }
-  const payload = {
-    id: usuarioID._id,
-  };
-  let encrypted_id = jwt.sign(payload, process.env.SECRET, {
-    expiresIn: 3600,
-  });
-  let transporter = nodemailer.createTransport({
-    service: "Gmail",
-    auth: {
-      user: "HuellitasVeterinariaSMT@gmail.com",
-      pass: "Huellitas1234",
-    },
-  });
-  let mailOptions = {
-    from: "HuellitasVeterinariaSMT@gmail.com",
-    to: email,
-    subject: "Restablecer tu contraseña",
-    html: `  
-    <h3>Has indicado que olvidaste tu contraseña. Si es así, haz clic aquí para crear una nueva:</h3>  
-    <a href="http://localhost:3000/resettingpassword/${encrypted_id}"><button>Crea una nueva contraseña</button></a>
-    <p>Si no querías restablecer tu contraseña, puedes ignorar este correo. La contraseña no se cambiará.</p>
-    `,
-  };
-  transporter.sendMail(mailOptions, function (error) {
-    if (error) {
-      res.status(500).send(error.msg);
-    } else {
-      res.status(200).jsonp(req.body);
-    }
-  });
 };
 
 exports.resettingPassword = async (req, res) => {

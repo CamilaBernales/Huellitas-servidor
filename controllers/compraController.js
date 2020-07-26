@@ -3,9 +3,13 @@ const Producto = require("../models/Producto");
 const ProductoCompra = require("../models/ProductoCompra");
 const Usuario = require("../models/Usuario");
 const nodemailer = require("nodemailer");
+const { PaymentApiMp } = require("./paymentApiMp");
 
 exports.crearCompra = async (req, res, next) => {
   try {
+    //traermos el comprador para mandar el email de compra exitosa
+    const comprador = await Usuario.findById(req.usuario.id);
+    //creamos la compra
     for (let index = 0; index < req.body.pedido.length; index++) {
       const productoId = req.body.pedido[index].producto;
       let producto = await Producto.findById(productoId);
@@ -20,14 +24,50 @@ exports.crearCompra = async (req, res, next) => {
           .json({ msg: `El producto ${producto.nombre} no está disponible.` });
       }
     }
+    const pago = await PaymentApiMp(req.body);
+    if (pago.body.status !== "approved") {
+      res.status(202).json({ msg: "El pago no pudo ser procesado." });
+    }
+    const { detallesEnvio, pedido, token, total, ...resto } = req.body;
+    const compraNueva = {
+      ...resto,
+      detallesEnvio,
+      usuario: req.usuario.id,
+      pedido,
+      token,
+      total,
+      fecha: Date.now(),
+    };
     req.body.usuario = req.usuario.id;
-    let compra = new Compra(req.body);
+    let compra = new Compra(compraNueva);
     let compraId;
     await compra.save().then((id) => (compraId = id._id));
     req.body.compra = compraId;
+    let transporter = nodemailer.createTransport({
+      service: "Gmail",
+      auth: {
+        user: "HuellitasVeterinariaSMT@gmail.com",
+        pass: "Huellitas1234",
+      },
+    });
+    let mailOptions = {
+      from: "HuellitasVeterinariaSMT@gmail.com",
+      to: comprador.email,
+      subject: "Compra realizada con éxito",
+      text:
+        "Gracias por tu compra! Recibiras información de tu pedido en breve.",
+    };
+    transporter.sendMail(mailOptions, function (error) {
+      if (error) {
+        res.status(500).jsonp(error);
+      } else {
+        res.status(200).jsonp(req.body);
+      }
+    });
     next();
   } catch (error) {
-    res.status(500).json({ msg: "Hubo un error" });
+    console.log(error);
+    res.status(500).json({ msg: "Hubo un error", error });
   }
 };
 
@@ -66,7 +106,7 @@ exports.filtrarCompras = async (req, res) => {
     };
     const compras = await Compra.paginate(
       {
-        nombre: { $regex: ".*" + nombre + ".*", $options: "i" },
+        "detallesEnvio.nombre": { $regex: ".*" + nombre + ".*", $options: "i" },
       },
       options
     );
@@ -87,36 +127,19 @@ exports.filtrarCompras = async (req, res) => {
     res.status(500).json({ msg: "Hubo un error" });
   }
 };
-exports.sendEmail = function (req, res) {
-  const { email } = req.body;
-  let transporter = nodemailer.createTransport({
-    service: "Gmail",
-    auth: {
-      user: "HuellitasVeterinariaSMT@gmail.com",
-      pass: "Huellitas1234",
-    },
-  });
-  let mailOptions = {
-    from: "HuellitasVeterinariaSMT@gmail.com",
-    to: email,
-    subject: "Compra realizada con éxito",
-    text: "Gracias por tu compra! Recibiras información de tu pedido en breve.",
-  };
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      res.send(500, error.msg);
-    } else {
-      res.status(200).jsonp(req.body);
-    }
-  });
-};
 
 exports.obtenerComprasUsuario = async (req, res) => {
   try {
     const comprador = await Usuario.findById(req.usuario.id).select("_id");
+    if (!comprador) {
+      return res.status(412).json({ msg: "No se encontro al comprador." });
+    }
     const compras = await Compra.find({
-      usuario: comprador,
+      usuario: req.usuario.id,
     });
+    if (!compras.length) {
+      return res.status(412).json({ msg: "No hay compras." });
+    }
     for (let i = 0; i < compras.length; i++) {
       const compra = compras[i]._doc._id;
       compras[i]._doc.pedido = await ProductoCompra.find(
