@@ -18,8 +18,9 @@ exports.crearUsuario = async (req, res) => {
     }
     if (telefono !== "" && telefono !== undefined && telefono !== null) {
       let numbervalidation = /^(381)?[0-9]{8,10}/;
+      let numberString = telefono.toString()
       if (
-        !telefono.match(numbervalidation) ||
+        !numberString.match(numbervalidation) ||
         telefono.length > 10 ||
         telefono.length < 8
       ) {
@@ -144,14 +145,17 @@ exports.cambiarRol = async (req, res) => {
 
 exports.updateUsuario = async (req, res) => {
   const { email, telefono } = req.body;
+  console.log(telefono)
   try {
     if (!email.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i)) {
       return res.status(403).json({ msg: "Ingrese un email válido." });
     }
+    
     if (telefono !== "" && telefono !== undefined && telefono !== null) {
       let numbervalidation = /^(381)?[0-9]{8,10}/;
+      let numberString = telefono.toString()
       if (
-        !telefono.match(numbervalidation) ||
+        !numberString.match(numbervalidation) ||
         telefono.length > 10 ||
         telefono.length < 8
       ) {
@@ -168,6 +172,7 @@ exports.updateUsuario = async (req, res) => {
     res.json(usuario);
   } catch (error) {
     res.status(500).json({ msg: "Hubo un error." });
+    console.log(error);
   }
 };
 
