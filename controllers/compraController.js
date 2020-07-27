@@ -132,13 +132,13 @@ exports.obtenerComprasUsuario = async (req, res) => {
   try {
     const comprador = await Usuario.findById(req.usuario.id).select("_id");
     if (!comprador) {
-      return res.status(412).json({ msg: "No se encontro al comprador." });
+      return res.status(202).json({ msg: "No se encontro al comprador." });
     }
     const compras = await Compra.find({
       usuario: req.usuario.id,
     });
-    if (!compras.length) {
-      return res.status(412).json({ msg: "No hay compras." });
+    if (compras.length=== 0) {
+      return res.status(202).json([]);
     }
     for (let i = 0; i < compras.length; i++) {
       const compra = compras[i]._doc._id;
