@@ -38,7 +38,6 @@ const CompraSchema = mongoose.Schema({
   },
   token: {
     type: String,
-    required: true,
   },
   detallesEnvio: DetallesEnvio,
   pedido: {

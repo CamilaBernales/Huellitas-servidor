@@ -24,9 +24,11 @@ exports.crearCompra = async (req, res, next) => {
           .json({ msg: `El producto ${producto.nombre} no está disponible.` });
       }
     }
-    const pago = await PaymentApiMp(req.body);
-    if (pago.body.status !== "approved") {
-      res.status(202).json({ msg: "El pago no pudo ser procesado." });
+    if (req.body.medioDePago.efectivoChecked === false) {
+      let pago = await PaymentApiMp(req.body);
+      if (pago.body.status !== "approved") {
+        return res.status(202).json({ msg: "El pago no pudo ser procesado." });
+      }
     }
     const { detallesEnvio, pedido, token, total, ...resto } = req.body;
     const compraNueva = {
@@ -137,7 +139,7 @@ exports.obtenerComprasUsuario = async (req, res) => {
     const compras = await Compra.find({
       usuario: req.usuario.id,
     });
-    if (compras.length=== 0) {
+    if (compras.length === 0) {
       return res.status(202).json([]);
     }
     for (let i = 0; i < compras.length; i++) {
