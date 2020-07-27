@@ -121,7 +121,7 @@ exports.obtenerTurnosUsuario = async (req, res) => {
         $lt: fechaActual,
       },
     }).sort("fecha");
-    return res.status(200).json({turnosProximos, turnosPasados});
+    return res.status(200).json({ turnosProximos, turnosPasados });
   } catch (error) {
     res.status(500).json({ msg: "Hubo un error." });
   }
@@ -143,34 +143,25 @@ exports.eliminarTurno = async (req, res) => {
 };
 exports.obtenerFiltros = async (req, res) => {
   try {
-    const { fecha, pagina } = req.query;
-    let options = {
-      page: pagina,
-      limit: 10,
-    };
+    const { fecha } = req.query;
+
     let turnosFiltrados;
     let fechaActual = moment().format("YYYY-MM-DD");
     let proxSemana = moment().add(7, "days").format("YYYY-MM-DD");
     if (fecha === "proximasemana") {
-      turnosFiltrados = await Turno.paginate(
-        {
-          fecha: {
-            $gte: proxSemana,
-          },
-        },
-        options
-      );
+      turnosFiltrados = await Turno.find({
+        fecha: {
+          $gte: proxSemana,
+        }
+      });
     } else if (fecha === "hoy") {
-      turnosFiltrados = await Turno.paginate(
-        {
-          fecha: {
-            $eq: fechaActual,
-          },
-        },
-        options
-      );
+      turnosFiltrados = await Turno.find({
+        fecha: {
+          $eq: fechaActual,
+        }
+      });
     } else {
-      turnosFiltrados = await Turno.paginate({}, options);
+      turnosFiltrados = await Turno.find({});
     }
     res.status(200).json(turnosFiltrados);
   } catch (error) {
