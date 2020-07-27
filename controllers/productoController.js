@@ -44,7 +44,7 @@ exports.obtenerProductos = async (req, res) => {
     const { pagina } = req.query;
     const options = {
       page: pagina,
-      limit: 12
+      limit: 12,
     };
     const productos = await Producto.paginate({}, options);
     res.status(200).json(productos);
@@ -65,18 +65,12 @@ exports.obtenerProducto = async (req, res) => {
 
 exports.ObtenerProductoFiltrado = async (req, res) => {
   try {
-    const { nombre, tipoproducto, pagina } = req.query;
-    const options = {
-      page: pagina,
-      limit: 10
-    };
-    const productosfiltrados = await Producto.paginate(
-      {
-        nombre: { $regex: ".*" + nombre + ".*", $options: "i" },
-        tipoproducto: { $regex: ".*" + tipoproducto + ".*", $options: "i" },
-      },
-      options
-    );
+    const { nombre, tipoproducto } = req.query;
+
+    const productosfiltrados = await Producto.paginate({
+      nombre: { $regex: ".*" + nombre + ".*", $options: "i" },
+      tipoproducto: { $regex: ".*" + tipoproducto + ".*", $options: "i" },
+    });
     res.status(200).json(productosfiltrados);
   } catch (error) {
     console.log(error);
