@@ -30,5 +30,5 @@ router.put("/update/:id", auth, authrol, productoController.updateProducto);
 router.get("/listado", productoController.obtenerProductos);
 router.get("/producto/:id", productoController.obtenerProducto);
 router.get("/productosfiltrados", productoController.ObtenerProductoFiltrado);
-
+router.delete("/delete/:id",auth, authrol, productoController.eliminarProducto)
 module.exports = router;

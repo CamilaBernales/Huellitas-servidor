@@ -63,6 +63,20 @@ exports.obtenerProducto = async (req, res) => {
   }
 };
 
+exports.eliminarProducto = async (req, res) => {
+  try {
+    let producto = await Producto.findById(req.params.id);
+    if (!producto) {
+      res.status(404).json({ msg: "Producto no encontrado." });
+    }
+    //lo elimino
+    await Producto.findByIdAndRemove({ _id: req.params.id });
+    res.json({ msg: "Producto eliminado correctamente." });
+  } catch (error) {
+    res.status(500).json({ msg: "Hubo un error." });
+  }
+};
+
 exports.ObtenerProductoFiltrado = async (req, res) => {
   try {
     const { nombre, tipoproducto } = req.query;
