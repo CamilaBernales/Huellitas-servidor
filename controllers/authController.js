@@ -19,7 +19,7 @@ exports.autenticarUsuario = async (req, res) => {
     const passCorrecto = await bcryptjs.compare(password, usuario.password);
     if (!passCorrecto) {
       return res.status(403).json({
-        msg: "Contraseña no válida.",
+        msg: "Correo y/o contraseña no válida.",
       });
     }
     const payload = {
