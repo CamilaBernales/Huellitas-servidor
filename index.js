@@ -6,7 +6,7 @@ const cors = require('cors');
 const app = express();
 
 //puerto
-const PORT = process.env.PORT || 4000;
+const port = process.env.port || 4000;
 //conectar bd
 app.use(cors());
 conectarDB();
@@ -22,7 +22,7 @@ app.use('/api/productos', require('./routes/productos'));
 app.use('/api/compra', require('./routes/compra'));
 app.use('/api/mensajes', require('./routes/mensajes'));
 
-app.listen(PORT,'0.0.0.0', () => {
+app.listen(port,'0.0.0.0', () => {
   //arrancar servidor
   console.log(`Servidor Funcionando en puerto ${PORT}`);
 })
