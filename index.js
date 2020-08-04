@@ -22,7 +22,7 @@ app.use('/api/productos', require('./routes/productos'));
 app.use('/api/compra', require('./routes/compra'));
 app.use('/api/mensajes', require('./routes/mensajes'));
 
-app.listen(PORT, () => {
+app.listen(PORT,'0.0.0.0', () => {
   //arrancar servidor
   console.log(`Servidor Funcionando en puerto ${PORT}`);
 })
