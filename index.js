@@ -1,28 +1,28 @@
-const express  = require('express');
-const conectarDB = require('./db');
-const morgan = require('morgan');
-const cors = require('cors');
+const express = require("express");
+const conectarDB = require("./db");
+const morgan = require("morgan");
+const cors = require("cors");
 
 const app = express();
 
 //puerto
-const port = process.env.port || 4000;
+const port = process.env.PORT || 4000;
 //conectar bd
 app.use(cors());
 conectarDB();
 //middlewares
-app.use(morgan('dev'));
+app.use(morgan("dev"));
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 //rutas
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/usuarios', require('./routes/usuarios'));
-app.use('/api/turnos', require('./routes/turnos'));
-app.use('/api/productos', require('./routes/productos'));
-app.use('/api/compra', require('./routes/compra'));
-app.use('/api/mensajes', require('./routes/mensajes'));
+app.use("/api/auth", require("./routes/auth"));
+app.use("/api/usuarios", require("./routes/usuarios"));
+app.use("/api/turnos", require("./routes/turnos"));
+app.use("/api/productos", require("./routes/productos"));
+app.use("/api/compra", require("./routes/compra"));
+app.use("/api/mensajes", require("./routes/mensajes"));
 
-app.listen(port,'0.0.0.0', () => {
+app.listen(port, "0.0.0.0", () => {
   //arrancar servidor
-  console.log(`Servidor Funcionando en puerto ${PORT}`);
-})
+  console.log(`Servidor Funcionando en puerto ${port}`);
+});
