@@ -8,13 +8,13 @@ exports.autenticarUsuario = async (req, res) => {
     let usuario = await Usuario.findOne({
       email,
     });
-    if (!usuario) {
-      return res.status(403).json({
-        msg: "El usuario no existe.",
-      });
-    }
     if (!email.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i)) {
       return res.status(403).json({ msg: "Ingrese un email válido." });
+    }
+    if (!usuario) {
+      return res.status(403).json({
+        msg: "Correo y/o contraseña no valido.",
+      });
     }
     const passCorrecto = await bcryptjs.compare(password, usuario.password);
     if (!passCorrecto) {

@@ -1,12 +1,11 @@
 var mercadopago = require("mercadopago");
 mercadopago.configurations.setAccessToken(
-  "TEST-3807724980483408-072112-5cb501d261b27deb573e6b9643403d36-376016011"
+  process.env.APITOKENMP
 );
 
 exports.PaymentApiMp = (data) => {
   mercadopago.configure({
-    access_token:
-      "TEST-3807724980483408-072112-5cb501d261b27deb573e6b9643403d36-376016011",
+    access_token:process.env.APITOKENMP
   });
   var payment_data = {
     transaction_amount: data.total,
