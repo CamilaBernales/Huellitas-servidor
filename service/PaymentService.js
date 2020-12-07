@@ -2,8 +2,7 @@
 
 const axios = require("axios");
 exports.createPaymentMercadoPago = async (compras) => {
-  let access_token =
-    "APP_USR-3807724980483408-072112-2f213bf65ab7fd9bbbfc48072d1d6937-376016011"; //pasar esto a env
+  let access_token = process.env.token
   let mercadoPagoUrl = "https://api.mercadopago.com/checkout"; 
   const url = `${mercadoPagoUrl}/preferences?access_token=${access_token}`;
 
