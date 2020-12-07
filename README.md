@@ -3,7 +3,7 @@
 La página web de nuestro proyecto, Veterinaria "Huellitas", está diseñada para brindar dos tipos de servicios:​
 <ul>
 <li type="square">Venta de variedad de productos</li>
-<li type="square">VSolicitud de turnos médicos.</li>
+<li type="square">Solicitud de turnos médicos.</li>
 </ul>
 Estos dos servicios son brindados a cualquier usuario que esté dispuesto a hacer un registro y un logeo. Sus datos son enviados a la BD con el fin de guardar sus solicitudes y brindar un servicio óptimo y transparente. El control de estas solicitudes es llevada a cabo por un usuario administrador, el cual tiene a su disposicion la informacion en formato de tablas y tambien la facilidad de contestar dudas a traves de correo electrónico
 </p>
