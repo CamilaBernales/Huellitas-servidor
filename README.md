@@ -1,4 +1,4 @@
-<h1>Proyecto final</h1>
+<h1>Proyecto fullstack</h1>
 <p>
 La página web de nuestro proyecto, Veterinaria "Huellitas", está diseñada para brindar dos tipos de servicios:​
 <ul>
